@@ -35,6 +35,14 @@ Nodo::Nodo() {
     pins_pH_configurados = false;
 }
 
+Nodo::~Nodo ()
+{
+    if (pins_pH_configurados) {
+        delete pH_serial;
+        pH_serial = NULL;
+    }
+}
+    
 void
 Nodo::configura_pins_pH (int rx, int tx)
 {
@@ -47,7 +55,7 @@ Nodo::configura_pins_pH (int rx, int tx)
     pin_rx_pH = rx;
     pin_tx_pH = tx;
 
-    pH_serial = SoftwareSerial (pin_rx_pH, pin_tx_pH);
+    pH_serial = new SoftwareSerial (pin_rx_pH, pin_tx_pH, false);
 }
 
 void Nodo::begin() {
@@ -55,7 +63,7 @@ void Nodo::begin() {
   Serial.begin(38400);
   Serial.println("Iniciando...");
   if (pins_pH_configurados)
-      pH_serial.begin(38400);
+      pH_serial->begin(38400);
 
   Serial.println("pH...");
   OD_1serial.begin(38400);
@@ -85,9 +93,9 @@ void Nodo::modo_standby() {
   OD_4serial.print("e\r");
 
   if (pins_pH_configurados) {
-      pH_serial.print("e\r");
+      pH_serial->print("e\r");
       delay(50);
-      pH_serial.print("e\r");
+      pH_serial->print("e\r");
   }
 
 }
@@ -139,11 +147,11 @@ float Nodo::read_pH() {
 
     assert (pins_pH_configurados != false);
 
-    pH_serial.listen();
-    pH_serial.print("r\r");
+    pH_serial->listen();
+    pH_serial->print("r\r");
     delay(280);
-    if (pH_serial.available() > 0) {
-	_rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+    if (pH_serial->available() > 0) {
+	_rec = pH_serial->readBytesUntil('\r', _data, BUFFER_ATLAS);
 	_data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -156,13 +164,13 @@ float Nodo::read_pH(float _temp) {
 
     assert (pins_pH_configurados != false);
 
-    pH_serial.listen();
-    pH_serial.print(_temp);
-    pH_serial.print("\r");
-    pH_serial.print("r\r");
+    pH_serial->listen();
+    pH_serial->print(_temp);
+    pH_serial->print("\r");
+    pH_serial->print("r\r");
     delay(280);
-    if (pH_serial.available() > 0) {
-        _rec = pH_serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+    if (pH_serial->available() > 0) {
+        _rec = pH_serial->readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_pH = atof(_data);
