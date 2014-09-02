@@ -33,14 +33,28 @@ Nodo::Nodo() {
     float valor_T4;
 
     pins_pH_configurados = false;
+
+    sensores_OD     = NULL;
+    num_sensores_OD = 0;
 }
 
 Nodo::~Nodo ()
 {
+    int i;
+
     if (pins_pH_configurados) {
         delete pH_serial;
         pH_serial = NULL;
     }
+
+    for (i = 0; i < num_sensores_OD; i++) {
+	delete sensores_OD[i];
+	sensores_OD[i] = NULL;
+    }
+    delete[] sensores_OD;
+    sensores_OD = NULL;
+
+    num_sensores_OD = 0;
 }
     
 void
@@ -151,7 +165,7 @@ float Nodo::read_pH() {
     pH_serial->print("r\r");
     delay(280);
     if (pH_serial->available() > 0) {
-	_rec = pH_serial->readBytesUntil('\r', _data, BUFFER_ATLAS);
+	_rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
 	_data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -170,7 +184,7 @@ float Nodo::read_pH(float _temp) {
     pH_serial->print("r\r");
     delay(280);
     if (pH_serial->available() > 0) {
-        _rec = pH_serial->readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -183,7 +197,7 @@ float Nodo::read_OD1() {
     OD_1serial.print("r\r");
     delay(250);
     if (OD_1serial.available() > 0) {
-        _rec = OD_1serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+	_rec = OD_1serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD1 = atof(_data);
@@ -196,7 +210,7 @@ float Nodo::read_OD2() {
     OD_2serial.print("r\r");
     delay(250);
     if (OD_2serial.available() > 0) {
-        _rec = OD_2serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_2serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD2 = atof(_data);
@@ -209,7 +223,7 @@ float Nodo::read_OD3() {
     OD_3serial.print("r\r");
     delay(250);
     if (OD_3serial.available() > 0) {
-        _rec = OD_3serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_3serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD3 = atof(_data);
@@ -222,9 +236,46 @@ float Nodo::read_OD4() {
     OD_4serial.print("r\r");
     delay(250);
     if (OD_4serial.available() > 0) {
-        _rec = OD_4serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_4serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD4 = atof(_data);
     return valor_OD4;
+}
+
+static SoftwareSerial **
+crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existentes)
+{
+    SoftwareSerial **nuevo_arr = new SoftwareSerial *[n_elementos_existentes + 1];
+    int i;
+
+    for (i = 0; i < n_elementos_existentes; i++)
+	nuevo_arr[i] = arr[i];
+
+    nuevo_arr[i] = NULL;
+    delete[] arr;
+
+    return nuevo_arr;
+}
+
+int Nodo::pon_sensor_OD (int rx, int tx)
+{
+    SoftwareSerial *sensor = new SoftwareSerial (rx, tx, false);
+    int indice;
+
+    sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
+
+    indice = num_sensores_OD;
+    sensores_OD[indice] = sensor;
+    num_sensores_OD++;
+
+    return indice;
+}
+
+float Nodo::read_OD (int num_sensor)
+{
+    assert (num_sensor >= 0);
+    assert (num_sensor < num_sensores_OD);
+
+    ... sensores_OD[num_sensor] ...
 }

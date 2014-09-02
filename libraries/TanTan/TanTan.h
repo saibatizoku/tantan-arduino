@@ -13,10 +13,6 @@
 
 #define ONE_WIRE_BUS 23
 
-#define BUFFER_ATLAS 20
-#define RX_PH 50
-#define TX_PH 51
-
 #define RX_OD_1 10
 #define TX_OD_1 6
 
@@ -37,6 +33,8 @@ class Nodo
         ~Nodo();
 
 	void configura_pins_pH (int rx, int tx);
+
+	int pon_sensor_OD (int rx, int tx);
 	
         float valor_pH;
         float valor_OD1;
@@ -58,6 +56,7 @@ class Nodo
         //float atlas_command(SoftwareSerial &serial, String command);
         float read_pH();
         float read_pH(float temp);
+	float read_OD (int num_sensor);
         float read_OD1();
         float read_OD2();
         float read_OD3();
@@ -78,6 +77,9 @@ class Nodo
 	int pin_rx_pH;
 	int pin_tx_pH;
     SoftwareSerial *pH_serial;
+
+    SoftwareSerial **sensores_OD;
+    int num_sensores_OD;
 };
 
 #endif
