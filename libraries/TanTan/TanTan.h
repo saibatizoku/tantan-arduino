@@ -30,6 +30,7 @@ class Nodo
 {
     public:
         Nodo();
+        ~Nodo();
 
 	void configura_pins_pH (int rx, int tx);
 	
@@ -72,6 +73,7 @@ class Nodo
 	boolean pins_pH_configurados;
 	int pin_rx_pH;
 	int pin_tx_pH;
+    SoftwareSerial *pH_serial;
 };
 
 #endif
