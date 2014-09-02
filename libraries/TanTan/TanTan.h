@@ -34,6 +34,9 @@ class Nodo
 {
     public:
         Nodo();
+
+	void configura_pins_pH (int rx, int tx);
+	
         float valor_pH;
         float valor_OD1;
         float valor_OD2;
@@ -69,6 +72,10 @@ class Nodo
         Stream* _OD2;
         Stream* _OD3;
         Stream* _OD4;
+
+	boolean pins_pH_configurados;
+	int pin_rx_pH;
+	int pin_tx_pH;
 };
 
 #endif
