@@ -33,14 +33,28 @@ Nodo::Nodo() {
     float valor_T4;
 
     pins_pH_configurados = false;
+
+    sensores_OD     = NULL;
+    num_sensores_OD = 0;
 }
 
 Nodo::~Nodo ()
 {
+    int i;
+
     if (pins_pH_configurados) {
         delete pH_serial;
         pH_serial = NULL;
     }
+
+    for (i = 0; i < num_sensores_OD; i++) {
+	delete sensores_OD[i];
+	sensores_OD[i] = NULL;
+    }
+    delete[] sensores_OD;
+    sensores_OD = NULL;
+
+    num_sensores_OD = 0;
 }
     
 void
@@ -227,4 +241,41 @@ float Nodo::read_OD4() {
     }
     valor_OD4 = atof(_data);
     return valor_OD4;
+}
+
+static SoftwareSerial **
+crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existentes)
+{
+    SoftwareSerial **nuevo_arr = new SoftwareSerial *[n_elementos_existentes + 1];
+    int i;
+
+    for (i = 0; i < n_elementos_existentes; i++)
+	nuevo_arr[i] = arr[i];
+
+    nuevo_arr[i] = NULL;
+    delete[] arr;
+
+    return nuevo_arr;
+}
+
+int Nodo::pon_sensor_OD (int rx, int tx)
+{
+    SoftwareSerial *sensor = new SoftwareSerial (rx, tx, false);
+    int indice;
+
+    sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
+
+    indice = num_sensores_OD;
+    sensores_OD[indice] = sensor;
+    num_sensores_OD++;
+
+    return indice;
+}
+
+float Nodo::read_OD (int num_sensor)
+{
+    assert (num_sensor >= 0);
+    assert (num_sensor < num_sensores_OD);
+
+    ... sensores_OD[num_sensor] ...
 }
