@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "Arduino.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -8,7 +9,6 @@
 
 OneWire oneWire(ONE_WIRE_BUS);
 
-SoftwareSerial pHserial(RX_PH, TX_PH);
 SoftwareSerial OD_1serial(RX_OD_1, TX_OD_1);
 SoftwareSerial OD_2serial(RX_OD_2, TX_OD_2);
 SoftwareSerial OD_3serial(RX_OD_3, TX_OD_3);
@@ -31,13 +31,32 @@ Nodo::Nodo() {
     float valor_T2;
     float valor_T3;
     float valor_T4;
+
+    pins_pH_configurados = false;
+}
+
+void
+Nodo::configura_pins_pH (int rx, int tx)
+{
+    assert (rx >= 0);
+    assert (tx >= 0);
+    assert (rx != tx);
+    assert (pins_pH_configurados == false);
+
+    pins_pH_configurados = true;
+    pin_rx_pH = rx;
+    pin_tx_pH = tx;
+
+    pH_serial = SoftwareSerial (pin_rx_pH, pin_tx_pH);
 }
 
 void Nodo::begin() {
   //busTEMP.begin();
   Serial.begin(38400);
   Serial.println("Iniciando...");
-  pHserial.begin(38400);|addph
+  if (pins_pH_configurados)
+      pH_serial.begin(38400);
+
   Serial.println("pH...");
   OD_1serial.begin(38400);
   Serial.println("OD 1...");
@@ -65,9 +84,11 @@ void Nodo::modo_standby() {
   delay(50);
   OD_4serial.print("e\r");
 
-  pHserial.print("e\r");
-  delay(50);
-  pHserial.print("e\r");
+  if (pins_pH_configurados) {
+      pH_serial.print("e\r");
+      delay(50);
+      pH_serial.print("e\r");
+  }
 
 }
 //void Nodo::add_T1(uint8_t* _termo) {
@@ -115,10 +136,13 @@ void Nodo::modo_standby() {
 float Nodo::read_pH() {
     byte _rec = 0;
     char _data[20];
-    pHserial.listen();
-    pHserial.print("r\r");
+
+    assert (pins_pH_configurados != false);
+
+    pH_serial.listen();
+    pH_serial.print("r\r");
     delay(280);
-    if (pHserial.available() > 0) {
+    if (pH_serial.available() > 0) {
 	_rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
 	_data[_rec] = 0;
     }
@@ -129,13 +153,16 @@ float Nodo::read_pH() {
 float Nodo::read_pH(float _temp) {
     byte _rec = 0;
     char _data[20];
-    pHserial.listen();
-    pHserial.print(_temp);
-    pHserial.print("\r");
-    pHserial.print("r\r");
+
+    assert (pins_pH_configurados != false);
+
+    pH_serial.listen();
+    pH_serial.print(_temp);
+    pH_serial.print("\r");
+    pH_serial.print("r\r");
     delay(280);
-    if (pHserial.available() > 0) {
-        _rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+    if (pH_serial.available() > 0) {
+        _rec = pH_serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_pH = atof(_data);
