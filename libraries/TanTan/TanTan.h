@@ -13,10 +13,6 @@
 
 #define ONE_WIRE_BUS 23
 
-#define BUFFER_ATLAS 20
-#define RX_PH 50
-#define TX_PH 51
-
 #define RX_OD_1 10
 #define TX_OD_1 6
 
