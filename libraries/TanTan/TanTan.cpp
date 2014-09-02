@@ -119,12 +119,13 @@ float Nodo::read_pH() {
     pHserial.print("r\r");
     delay(280);
     if (pHserial.available() > 0) {
-        _rec = pHserial.readBytesUntil(13, _data, BUFFER_ATLAS);
-        _data[_rec] = 0;
+	_rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+	_data[_rec] = 0;
     }
     valor_pH = atof(_data);
     return valor_pH;
 }
+
 float Nodo::read_pH(float _temp) {
     byte _rec = 0;
     char _data[20];
@@ -134,7 +135,7 @@ float Nodo::read_pH(float _temp) {
     pHserial.print("r\r");
     delay(280);
     if (pHserial.available() > 0) {
-        _rec = pHserial.readBytesUntil(13, _data, BUFFER_ATLAS);
+        _rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -147,7 +148,7 @@ float Nodo::read_OD1() {
     OD_1serial.print("r\r");
     delay(250);
     if (OD_1serial.available() > 0) {
-        _rec = OD_1serial.readBytesUntil(13, _data, BUFFER_ATLAS);
+        _rec = OD_1serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_OD1 = atof(_data);
@@ -160,7 +161,7 @@ float Nodo::read_OD2() {
     OD_2serial.print("r\r");
     delay(250);
     if (OD_2serial.available() > 0) {
-        _rec = OD_2serial.readBytesUntil(13, _data, BUFFER_ATLAS);
+        _rec = OD_2serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_OD2 = atof(_data);
@@ -173,7 +174,7 @@ float Nodo::read_OD3() {
     OD_3serial.print("r\r");
     delay(250);
     if (OD_3serial.available() > 0) {
-        _rec = OD_3serial.readBytesUntil(13, _data, BUFFER_ATLAS);
+        _rec = OD_3serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_OD3 = atof(_data);
@@ -186,7 +187,7 @@ float Nodo::read_OD4() {
     OD_4serial.print("r\r");
     delay(250);
     if (OD_4serial.available() > 0) {
-        _rec = OD_4serial.readBytesUntil(13, _data, BUFFER_ATLAS);
+        _rec = OD_4serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
         _data[_rec] = 0;
     }
     valor_OD4 = atof(_data);
