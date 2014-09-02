@@ -143,7 +143,7 @@ float Nodo::read_pH() {
     pH_serial.print("r\r");
     delay(280);
     if (pH_serial.available() > 0) {
-	_rec = pHserial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+	_rec = pHserial.readBytesUntil('\r', _data, sizeof (_data) - 1);
 	_data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -162,7 +162,7 @@ float Nodo::read_pH(float _temp) {
     pH_serial.print("r\r");
     delay(280);
     if (pH_serial.available() > 0) {
-        _rec = pH_serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = pH_serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_pH = atof(_data);
@@ -175,7 +175,7 @@ float Nodo::read_OD1() {
     OD_1serial.print("r\r");
     delay(250);
     if (OD_1serial.available() > 0) {
-        _rec = OD_1serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+	_rec = OD_1serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD1 = atof(_data);
@@ -188,7 +188,7 @@ float Nodo::read_OD2() {
     OD_2serial.print("r\r");
     delay(250);
     if (OD_2serial.available() > 0) {
-        _rec = OD_2serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_2serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD2 = atof(_data);
@@ -201,7 +201,7 @@ float Nodo::read_OD3() {
     OD_3serial.print("r\r");
     delay(250);
     if (OD_3serial.available() > 0) {
-        _rec = OD_3serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_3serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD3 = atof(_data);
@@ -214,7 +214,7 @@ float Nodo::read_OD4() {
     OD_4serial.print("r\r");
     delay(250);
     if (OD_4serial.available() > 0) {
-        _rec = OD_4serial.readBytesUntil('\r', _data, BUFFER_ATLAS);
+        _rec = OD_4serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
     valor_OD4 = atof(_data);
