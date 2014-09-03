@@ -366,6 +366,7 @@ void inicializar_sensores() {
   Serial.print("    Sensor temperatura 4: ");
   printAddress(termo4);
   Serial.println();
+  sensoresT.requestTemperatures();
 }
 
 void setup()
