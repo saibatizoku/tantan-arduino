@@ -1,6 +1,8 @@
 /*
    Copyright 2014 Óscar Justo, Joaquín Rosales
  
+ Xalapa, Veracruz. México 2014
+ 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
@@ -19,8 +21,7 @@
  1 sensor de pH
  4 sensores de oxígeno disuelto
  4 sensores de temperatura
- 
- Xalapa, Veracruz. México 2014
+
 */
  
 #include <OneWire.h>
