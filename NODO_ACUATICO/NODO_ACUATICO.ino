@@ -45,6 +45,7 @@
 #define RX_OD_4 13
 #define TX_OD_4 9
 
+int ONE_WIRE_BUS = 23;
 OneWire dsWire(ONE_WIRE_BUS);
 DallasTemperature sensoresT(&dsWire);
 

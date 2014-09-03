@@ -7,12 +7,6 @@
 #include "LiquidCrystal.h"
 #include "TanTan.h"
 
-OneWire oneWire(ONE_WIRE_BUS);
-
-SoftwareSerial OD_1serial(RX_OD_1, TX_OD_1);
-SoftwareSerial OD_2serial(RX_OD_2, TX_OD_2);
-SoftwareSerial OD_3serial(RX_OD_3, TX_OD_3);
-SoftwareSerial OD_4serial(RX_OD_4, TX_OD_4);
 
 
 Nodo::Nodo ()
@@ -70,6 +64,35 @@ void Nodo::configura_pins_pH (int rx, int tx)
     pH_serial = new SoftwareSerial (pin_rx_pH, pin_tx_pH, false);
 }
 
+static SoftwareSerial **
+crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existentes)
+{
+    SoftwareSerial **nuevo_arr = new SoftwareSerial *[n_elementos_existentes + 1];
+    int i;
+
+    for (i = 0; i < n_elementos_existentes; i++)
+        nuevo_arr[i] = arr[i];
+
+    nuevo_arr[i] = NULL;
+    delete[] arr;
+
+    return nuevo_arr;
+}
+
+int Nodo::pon_sensor_OD (int rx, int tx)
+{
+    SoftwareSerial *sensor = new SoftwareSerial (rx, tx, false);
+    int indice;
+
+    sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
+
+    indice = num_sensores_OD;
+    sensores_OD[indice] = sensor;
+    num_sensores_OD++;
+
+    return indice;
+}
+
 void Nodo::begin ()
 {
   Serial.begin(38400);
@@ -121,8 +144,7 @@ float Nodo::read_pH ()
 	_rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
 	_data[_rec] = 0;
     }
-    valor_pH = atof(_data);
-    return valor_pH;
+    return atof(_data);
 }
 
 float Nodo::read_pH (float _temp)
@@ -141,37 +163,7 @@ float Nodo::read_pH (float _temp)
         _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
-    valor_pH = atof(_data);
-    return valor_pH;
-}
-
-static SoftwareSerial **
-crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existentes)
-{
-    SoftwareSerial **nuevo_arr = new SoftwareSerial *[n_elementos_existentes + 1];
-    int i;
-
-    for (i = 0; i < n_elementos_existentes; i++)
-        nuevo_arr[i] = arr[i];
-
-    nuevo_arr[i] = NULL;
-    delete[] arr;
-
-    return nuevo_arr;
-}
-
-int Nodo::pon_sensor_OD (int rx, int tx)
-{
-    SoftwareSerial *sensor = new SoftwareSerial (rx, tx, false);
-    int indice;
-
-    sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
-
-    indice = num_sensores_OD;
-    sensores_OD[indice] = sensor;
-    num_sensores_OD++;
-
-    return indice;
+    return atof(_data);
 }
 
 float Nodo::read_OD (int num_sensor)
@@ -189,6 +181,5 @@ float Nodo::read_OD (int num_sensor)
         _rec = sensores_OD[num_sensor]->readBytesUntil('\r', _data, sizeof (_data) - 1);
         _data[_rec] = 0;
     }
-    valor_OD4 = atof(_data);
-    return valor_OD4;
+    return atof(_data);
 }
