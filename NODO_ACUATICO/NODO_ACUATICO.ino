@@ -97,7 +97,6 @@ void print_pH()
   lcd.setCursor(0,1);
   char tempph[5];
   String pHs = dtostrf(pHLect, 1, 2, tempph);
-  //  String OD1s = dtostrf(OD1, 1, 2, tempf);
   String msg = "pH:" + pHs;
   Serial.println(msg);
   msg = "pH: " + pHs + "   ";
@@ -362,12 +361,13 @@ void inicializar_sensores() {
 
 void setup()
 {
+  nodo.configura_pins_pH(RX_PH, TX_PH);
   nodo.begin();
-  //nodo.termo1 = termo1;
+
   inicializar_sensores();
   inicializar_botones();
   inicializar_seriales();
-  //Serial.begin(SERIAL_BAUD);
+
   lcd.begin(16, 2);
 
   serialPrintHelp();

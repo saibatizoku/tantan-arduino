@@ -15,9 +15,8 @@ SoftwareSerial OD_3serial(RX_OD_3, TX_OD_3);
 SoftwareSerial OD_4serial(RX_OD_4, TX_OD_4);
 
 
-//DallasTemperature busTEMP(&oneWire);
-
-Nodo::Nodo() {
+Nodo::Nodo ()
+{
     DeviceAddress termo1 = { 0x28, 0x80, 0x04, 0xFB, 0x04, 0x00, 0x00, 0x90 };
     DeviceAddress termo2 = { 0x28, 0x30, 0x4D, 0xFB, 0x04, 0x00, 0x00, 0x8D };
     DeviceAddress termo3 = { 0x28, 0x46, 0x9A, 0xFA, 0x04, 0x00, 0x00, 0x27 };
@@ -57,8 +56,7 @@ Nodo::~Nodo ()
     num_sensores_OD = 0;
 }
     
-void
-Nodo::configura_pins_pH (int rx, int tx)
+void Nodo::configura_pins_pH (int rx, int tx)
 {
     assert (rx >= 0);
     assert (tx >= 0);
@@ -72,8 +70,8 @@ Nodo::configura_pins_pH (int rx, int tx)
     pH_serial = new SoftwareSerial (pin_rx_pH, pin_tx_pH, false);
 }
 
-void Nodo::begin() {
-  //busTEMP.begin();
+void Nodo::begin ()
+{
   Serial.begin(38400);
   Serial.println("Iniciando...");
   if (pins_pH_configurados)
@@ -89,7 +87,9 @@ void Nodo::begin() {
   OD_4serial.begin(38400);
   Serial.println("OD 4...");
 }
-void Nodo::modo_standby() {
+
+void Nodo::modo_standby ()
+{
   OD_1serial.print("e\r");
   delay(50);
   OD_1serial.print("e\r");
@@ -111,51 +111,10 @@ void Nodo::modo_standby() {
       delay(50);
       pH_serial->print("e\r");
   }
-
 }
-//void Nodo::add_T1(uint8_t* _termo) {
-//    //termo1 = _termo;
-//}
-//float Nodo::read_T(DallasTemperature bus, DeviceAddress _termo) {
-//    float _T = bus.getTempC(_termo);
-//    return _T;
-//}
-//float Nodo::read_T1(DeviceAddress _termo) {
-//    float _T = busTEMP.getTempC(_termo);
-//    valor_T1 = _T;
-//    return valor_T1;
-//}
-//float Nodo::read_T2(DeviceAddress _termo) {
-//    float _T = busTEMP.getTempC(_termo);
-//    valor_T2 = _T;
-//    return valor_T2;
-//}
-//float Nodo::read_T3(DeviceAddress _termo) {
-//    float _T = busTEMP.getTempC(_termo);
-//    valor_T3 = _T;
-//    return valor_T3;
-//}
-//float Nodo::read_T4(DeviceAddress _termo) {
-//    float _T = busTEMP.getTempC(_termo);
-//    valor_T4 = _T;
-//    return valor_T4;
-//}
-//void Nodo::add_pH(SoftwareSerial &serial) {
-//    _pH = &serial;
-//}
-//void Nodo::add_OD1(SoftwareSerial &serial) {
-//    _OD1 = &serial;
-//}
-//void Nodo::add_OD2(SoftwareSerial &serial) {
-//    _OD2 = &serial;
-//}
-//void Nodo::add_OD3(SoftwareSerial &serial) {
-//    _OD3 = &serial;
-//}
-//void Nodo::add_OD4(SoftwareSerial &serial) {
-//    _OD4 = &serial;
-//}
-float Nodo::read_pH() {
+
+float Nodo::read_pH ()
+{
     byte _rec = 0;
     char _data[20];
 
@@ -172,7 +131,8 @@ float Nodo::read_pH() {
     return valor_pH;
 }
 
-float Nodo::read_pH(float _temp) {
+float Nodo::read_pH (float _temp)
+{
     byte _rec = 0;
     char _data[20];
 
@@ -190,7 +150,9 @@ float Nodo::read_pH(float _temp) {
     valor_pH = atof(_data);
     return valor_pH;
 }
-float Nodo::read_OD1() {
+
+float Nodo::read_OD1 ()
+{
     byte _rec = 0;
     char _data[20];
     OD_1serial.listen();
@@ -203,7 +165,9 @@ float Nodo::read_OD1() {
     valor_OD1 = atof(_data);
     return valor_OD1;
 }
-float Nodo::read_OD2() {
+
+float Nodo::read_OD2 ()
+{
     byte _rec = 0;
     char _data[20];
     OD_2serial.listen();
@@ -216,7 +180,9 @@ float Nodo::read_OD2() {
     valor_OD2 = atof(_data);
     return valor_OD2;
 }
-float Nodo::read_OD3() {
+
+float Nodo::read_OD3 ()
+{
     byte _rec = 0;
     char _data[20];
     OD_3serial.listen();
@@ -229,7 +195,9 @@ float Nodo::read_OD3() {
     valor_OD3 = atof(_data);
     return valor_OD3;
 }
-float Nodo::read_OD4() {
+
+float Nodo::read_OD4 ()
+{
     byte _rec = 0;
     char _data[20];
     OD_4serial.listen();
@@ -277,5 +245,5 @@ float Nodo::read_OD (int num_sensor)
     assert (num_sensor >= 0);
     assert (num_sensor < num_sensores_OD);
 
-    ... sensores_OD[num_sensor] ...
+    //... sensores_OD[num_sensor] ...
 }
