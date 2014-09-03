@@ -52,10 +52,6 @@ class Nodo
 
         float read_pH(float temp);
         float read_OD (int num_sensor);
-        float read_OD1();
-        float read_OD2();
-        float read_OD3();
-        float read_OD4();
     private:
         boolean pins_pH_configurados;
         int pin_rx_pH;

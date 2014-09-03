@@ -48,6 +48,8 @@
 OneWire dsWire(ONE_WIRE_BUS);
 DallasTemperature sensoresT(&dsWire);
 
+int SENSOR_OD1, SENSOR_OD2, SENSOR_OD3, SENSOR_OD4;
+
 DeviceAddress termo1 = { 0x28, 0x80, 0x04, 0xFB, 0x04, 0x00, 0x00, 0x90 };
 DeviceAddress termo2 = { 0x28, 0x30, 0x4D, 0xFB, 0x04, 0x00, 0x00, 0x8D };
 DeviceAddress termo3 = { 0x28, 0x46, 0x9A, 0xFA, 0x04, 0x00, 0x00, 0x27 };
@@ -171,7 +173,7 @@ void print_T4()
 }
 void print_OD1()
 {
-  float OD1 = nodo.read_OD1();
+  float OD1 = nodo.read_OD(SENSOR_OD1);
   char tempod1[5];
   String OD1s = dtostrf(OD1, 1, 2, tempod1);
   lcd.setCursor(0,1);
@@ -190,7 +192,7 @@ void on_item3_selected(MenuItem* p_menu_item)
 
 void print_OD2()
 {
-  float OD2 = nodo.read_OD2();
+  float OD2 = nodo.read_OD(SENSOR_OD2);
   char tempod1[5];
   String OD2s = dtostrf(OD2, 1, 2, tempod1);
   lcd.setCursor(0,1);
@@ -209,7 +211,7 @@ void on_item4_selected(MenuItem* p_menu_item)
 
 void print_OD3()
 {
-  float OD3 = nodo.read_OD3();
+  float OD3 = nodo.read_OD(SENSOR_OD3);
   char tempod1[5];
   String OD3s = dtostrf(OD3, 1, 2, tempod1);
   lcd.setCursor(0,1);
@@ -228,7 +230,7 @@ void on_item5_selected(MenuItem* p_menu_item)
 
 void print_OD4()
 {
-  float OD4 = nodo.read_OD4();
+  float OD4 = nodo.read_OD(SENSOR_OD4);
   char tempod1[5];
   String OD4s = dtostrf(OD4, 1, 2, tempod1);
   lcd.setCursor(0,1);
@@ -342,6 +344,12 @@ void printData(DeviceAddress deviceAddress)
   Serial.println();
 }
 void inicializar_sensores() {
+  nodo.configura_pins_pH(RX_PH, TX_PH);
+  SENSOR_OD1 = nodo.pon_sensor_OD(RX_OD_1, TX_OD_1);
+  SENSOR_OD2 = nodo.pon_sensor_OD(RX_OD_2, TX_OD_2);
+  SENSOR_OD3 = nodo.pon_sensor_OD(RX_OD_3, TX_OD_3);
+  SENSOR_OD4 = nodo.pon_sensor_OD(RX_OD_4, TX_OD_4);
+
   sensoresT.begin();
   Serial.print(sensoresT.getDeviceCount(), DEC);
   Serial.println(" dispositivos.");
@@ -361,10 +369,9 @@ void inicializar_sensores() {
 
 void setup()
 {
-  nodo.configura_pins_pH(RX_PH, TX_PH);
-  nodo.begin();
 
   inicializar_sensores();
+  nodo.begin();
   inicializar_botones();
   inicializar_seriales();
 

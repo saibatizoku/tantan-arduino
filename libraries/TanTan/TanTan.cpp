@@ -47,8 +47,8 @@ Nodo::~Nodo ()
     }
 
     for (i = 0; i < num_sensores_OD; i++) {
-	delete sensores_OD[i];
-	sensores_OD[i] = NULL;
+        delete sensores_OD[i];
+        sensores_OD[i] = NULL;
     }
     delete[] sensores_OD;
     sensores_OD = NULL;
@@ -78,33 +78,27 @@ void Nodo::begin ()
       pH_serial->begin(38400);
 
   Serial.println("pH...");
-  OD_1serial.begin(38400);
-  Serial.println("OD 1...");
-  OD_2serial.begin(38400);
-  Serial.println("OD 2...");
-  OD_3serial.begin(38400);
-  Serial.println("OD 3...");
-  OD_4serial.begin(38400);
-  Serial.println("OD 4...");
+
+  if (num_sensores_OD > 0) {
+      int i;
+      for (i = 0; i < num_sensores_OD; i++)
+          sensores_OD[i]->begin(38400);
+          Serial.print("OD ");
+          Serial.print(i);
+          Serial.println("...");
+  }
 }
 
 void Nodo::modo_standby ()
 {
-  OD_1serial.print("e\r");
-  delay(50);
-  OD_1serial.print("e\r");
-
-  OD_2serial.print("e\r");
-  delay(50);
-  OD_2serial.print("e\r");
-
-  OD_3serial.print("e\r");
-  delay(50);
-  OD_3serial.print("e\r");
-
-  OD_4serial.print("e\r");
-  delay(50);
-  OD_4serial.print("e\r");
+  if (num_sensores_OD > 0) {
+      int i;
+      for (i = 0; i < num_sensores_OD; i++) {
+          sensores_OD[i]->print("e\r");
+          delay(50);
+          sensores_OD[i]->print("e\r");
+      }
+  }
 
   if (pins_pH_configurados) {
       pH_serial->print("e\r");
@@ -151,66 +145,6 @@ float Nodo::read_pH (float _temp)
     return valor_pH;
 }
 
-float Nodo::read_OD1 ()
-{
-    byte _rec = 0;
-    char _data[20];
-    OD_1serial.listen();
-    OD_1serial.print("r\r");
-    delay(250);
-    if (OD_1serial.available() > 0) {
-	_rec = OD_1serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
-        _data[_rec] = 0;
-    }
-    valor_OD1 = atof(_data);
-    return valor_OD1;
-}
-
-float Nodo::read_OD2 ()
-{
-    byte _rec = 0;
-    char _data[20];
-    OD_2serial.listen();
-    OD_2serial.print("r\r");
-    delay(250);
-    if (OD_2serial.available() > 0) {
-        _rec = OD_2serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
-        _data[_rec] = 0;
-    }
-    valor_OD2 = atof(_data);
-    return valor_OD2;
-}
-
-float Nodo::read_OD3 ()
-{
-    byte _rec = 0;
-    char _data[20];
-    OD_3serial.listen();
-    OD_3serial.print("r\r");
-    delay(250);
-    if (OD_3serial.available() > 0) {
-        _rec = OD_3serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
-        _data[_rec] = 0;
-    }
-    valor_OD3 = atof(_data);
-    return valor_OD3;
-}
-
-float Nodo::read_OD4 ()
-{
-    byte _rec = 0;
-    char _data[20];
-    OD_4serial.listen();
-    OD_4serial.print("r\r");
-    delay(250);
-    if (OD_4serial.available() > 0) {
-        _rec = OD_4serial.readBytesUntil('\r', _data, sizeof (_data) - 1);
-        _data[_rec] = 0;
-    }
-    valor_OD4 = atof(_data);
-    return valor_OD4;
-}
-
 static SoftwareSerial **
 crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existentes)
 {
@@ -218,7 +152,7 @@ crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existente
     int i;
 
     for (i = 0; i < n_elementos_existentes; i++)
-	nuevo_arr[i] = arr[i];
+        nuevo_arr[i] = arr[i];
 
     nuevo_arr[i] = NULL;
     delete[] arr;
@@ -246,4 +180,15 @@ float Nodo::read_OD (int num_sensor)
     assert (num_sensor < num_sensores_OD);
 
     //... sensores_OD[num_sensor] ...
+    byte _rec = 0;
+    char _data[20];
+    sensores_OD[num_sensor]->listen();
+    sensores_OD[num_sensor]->print("r\r");
+    delay(250);
+    if (sensores_OD[num_sensor]->available() > 0) {
+        _rec = sensores_OD[num_sensor]->readBytesUntil('\r', _data, sizeof (_data) - 1);
+        _data[_rec] = 0;
+    }
+    valor_OD4 = atof(_data);
+    return valor_OD4;
 }
