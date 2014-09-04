@@ -97,15 +97,13 @@ void on_item1_selected(MenuItem* p_menu_item)
 
 void print_pH()
 {
-  float pHLect = nodo.read_pH();
-  lcd.setCursor(0,1);
-  char tempph[5];
-  String pHs = dtostrf(pHLect, 1, 2, tempph);
-  String msg = "pH:" + pHs;
-  Serial.println(msg);
-  msg = "pH: " + pHs + "   ";
-  lcd.print(msg);
-  delay(1500); // so we can look the result on the LCD
+    String pHs = nodo.leer_sensor("pH");
+    String msg = "pH:" + pHs;
+    Serial.println(msg);
+    msg = "pH: " + pHs + "     ";
+    lcd.setCursor(0,1);
+    lcd.print(msg);
+    delay(1500); // so we can look the result on the LCD
 }
 
 void on_item2_selected(MenuItem* p_menu_item)
@@ -175,9 +173,7 @@ void print_T4()
 }
 void print_OD1()
 {
-    float OD1 = nodo.read_OD(SENSOR_OD1);
-    char tempod1[5];
-    String OD1s = dtostrf(OD1, 1, 2, tempod1);
+    String OD1s = nodo.leer_sensor("OD", SENSOR_OD1);
     lcd.setCursor(0,1);
     String msg = "OD1:" + OD1s;
     Serial.println(msg);
@@ -194,9 +190,7 @@ void on_item3_selected(MenuItem* p_menu_item)
 
 void print_OD2()
 {
-    float OD2 = nodo.read_OD(SENSOR_OD2);
-    char tempod1[5];
-    String OD2s = dtostrf(OD2, 1, 2, tempod1);
+    String OD2s = nodo.leer_sensor("OD", SENSOR_OD2);
     lcd.setCursor(0,1);
     String msg = "OD2:" + OD2s;
     Serial.println(msg);
@@ -213,9 +207,7 @@ void on_item4_selected(MenuItem* p_menu_item)
 
 void print_OD3()
 {
-    float OD3 = nodo.read_OD(SENSOR_OD3);
-    char tempod1[5];
-    String OD3s = dtostrf(OD3, 1, 2, tempod1);
+    String OD3s = nodo.leer_sensor("OD", SENSOR_OD3);
     lcd.setCursor(0,1);
     String msg = "OD3:" + OD3s;
     Serial.println(msg);
@@ -232,9 +224,7 @@ void on_item5_selected(MenuItem* p_menu_item)
 
 void print_OD4()
 {
-    float OD4 = nodo.read_OD(SENSOR_OD4);
-    char tempod1[5];
-    String OD4s = dtostrf(OD4, 1, 2, tempod1);
+    String OD4s = nodo.leer_sensor("OD", SENSOR_OD4);
     lcd.setCursor(0,1);
     String msg = "OD4:" + OD4s;
     Serial.println(msg);

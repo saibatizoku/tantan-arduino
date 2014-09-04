@@ -97,9 +97,9 @@ String Nodo::leer_sensor (String tipo, int idx, String comando)
 {
     byte _rec = 0;
     char _data[20];
-    char tempval[5];
+    char tempval[10];
     float varval;
-    String varstr;
+    String varstr = "";
 
     assert (idx >= 0);
     assert (idx < num_sensores_OD);
@@ -107,38 +107,38 @@ String Nodo::leer_sensor (String tipo, int idx, String comando)
 
     if (tipo == "pH") {
         assert (pins_pH_configurados != false);
-        pH_serial->listen ();
-        pH_serial->print (comando);
 
-        delay(280);
-        if (pH_serial->available() > 0) {
-        _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
-        _data[_rec] = 0;
-        }
         if (comando == "r\r") {
-            varval = atof(_data);
-            varstr = dtostrf(atof(_data), 1, 2, tempval);
+            varval = Nodo::read_pH();
+            varstr = dtostrf(varval, 1, 2, tempval);
             return varstr;
         }
         else {
+            pH_serial->listen ();
+            pH_serial->print (comando);
+            delay(280);
+            if (pH_serial->available() > 0) {
+            _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
+            _data[_rec] = 0;
+            }
             return _data;
         }
     }
     if (tipo == "OD") {
         assert (num_sensores_OD > 0);
-        sensores_OD[idx]->listen ();
-        sensores_OD[idx]->print (comando);
-        delay(250);
-        if (sensores_OD[idx]->available() > 0) {
-            _rec = sensores_OD[idx]->readBytesUntil('\r', _data, sizeof (_data) - 1);
-            _data[_rec] = 0;
-        }
         if (comando == "r\r") {
-            varval = atof(_data);
-            varstr = dtostrf(atof(_data), 1, 2, tempval);
+            varval = Nodo::read_OD(idx);
+            varstr = dtostrf(varval, 1, 2, tempval);
             return varstr;
         }
         else {
+            sensores_OD[idx]->listen ();
+            sensores_OD[idx]->print (comando);
+            delay(250);
+            if (sensores_OD[idx]->available() > 0) {
+                _rec = sensores_OD[idx]->readBytesUntil('\r', _data, sizeof (_data) - 1);
+                _data[_rec] = 0;
+            }
             return _data;
         }
     }
