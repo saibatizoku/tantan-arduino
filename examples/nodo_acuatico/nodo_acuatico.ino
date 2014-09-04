@@ -365,7 +365,6 @@ void setup()
 
     inicializar_sensores();
     nodo.begin();
-    Serial.println("TanTan Nodo Acuicola v0.1");
     inicializar_botones();
     inicializar_seriales();
 
@@ -414,8 +413,6 @@ void setup()
     lcd.setCursor(0,1);
     lcd.print("TanTan v0.1     ");
     delay(2500);
-    displayMenu();
-    print_all();
     displayMenu();
 }
 
