@@ -1,29 +1,29 @@
 /*
    Copyright 2014 Óscar Justo, Joaquín Rosales
- 
- Xalapa, Veracruz. México 2014
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
- 
- Programa para un nodo acuático con:
- 1 sensor de pH
- 4 sensores de oxígeno disuelto
- 4 sensores de temperatura
 
-*/
- 
+   Xalapa, Veracruz. México 2014
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+   Programa para un nodo acuático con:
+   1 sensor de pH
+   4 sensores de oxígeno disuelto
+   4 sensores de temperatura
+
+ */
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <SoftwareSerial.h>
@@ -92,7 +92,7 @@ volatile int BOTON_NOMBRE;
 
 void on_item1_selected(MenuItem* p_menu_item)
 {
-  print_pH();
+    print_pH();
 }
 
 void print_pH()
@@ -110,437 +110,442 @@ void print_pH()
 
 void on_item2_selected(MenuItem* p_menu_item)
 {
-  print_OD1();
-  print_T1();
+    print_OD1();
+    print_T1();
 }
 void print_T1()
 {
-  //float T1 = nodo.read_T(sensoresT, termo1);
-  String pref = "T1:";
-  float _T = sensoresT.getTempC(termo1);
-  char tempod1[6];
-  String _Ts = dtostrf(_T, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = pref + _Ts;
-  Serial.print(pref);
-  Serial.print(_T);
-  msg = pref + " " + _Ts + "    " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    //float T1 = nodo.read_T(sensoresT, termo1);
+    String pref = "T1:";
+    float _T = sensoresT.getTempC(termo1);
+    char tempod1[6];
+    String _Ts = dtostrf(_T, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = pref + _Ts;
+    Serial.print(pref);
+    Serial.println(_T);
+    msg = pref + " " + _Ts + "    " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 void print_T2()
 {
-  //float T1 = nodo.read_T(sensoresT, termo1);
-  String pref = "T2:";
-  float _T = sensoresT.getTempC(termo2);
-  char tempod1[6];
-  String _Ts = dtostrf(_T, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = pref + _Ts;
-  Serial.print(pref);
-  Serial.println(_T);
-  msg = pref + " " + _Ts + "    " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    //float T1 = nodo.read_T(sensoresT, termo1);
+    String pref = "T2:";
+    float _T = sensoresT.getTempC(termo2);
+    char tempod1[6];
+    String _Ts = dtostrf(_T, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = pref + _Ts;
+    Serial.print(pref);
+    Serial.println(_T);
+    msg = pref + " " + _Ts + "    " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 void print_T3()
 {
-  //float T1 = nodo.read_T(sensoresT, termo1);
-  String pref = "T3:";
-  float _T = sensoresT.getTempC(termo3);
-  char tempod1[6];
-  String _Ts = dtostrf(_T, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = pref + _Ts;
-  Serial.print(pref);
-  Serial.print(_T);
-  msg = pref + " " + _Ts + "    " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    //float T1 = nodo.read_T(sensoresT, termo1);
+    String pref = "T3:";
+    float _T = sensoresT.getTempC(termo3);
+    char tempod1[6];
+    String _Ts = dtostrf(_T, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = pref + _Ts;
+    Serial.print(pref);
+    Serial.println(_T);
+    msg = pref + " " + _Ts + "    " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 void print_T4()
 {
-  //float T1 = nodo.read_T(sensoresT, termo1);
-  String pref = "T4:";
-  float _T = sensoresT.getTempC(termo4);
-  char tempod1[6];
-  String _Ts = dtostrf(_T, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = pref + _Ts;
-  Serial.print(pref);
-  Serial.print(_T);
-  msg = pref + " " + _Ts + "    " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    //float T1 = nodo.read_T(sensoresT, termo1);
+    String pref = "T4:";
+    float _T = sensoresT.getTempC(termo4);
+    char tempod1[6];
+    String _Ts = dtostrf(_T, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = pref + _Ts;
+    Serial.print(pref);
+    Serial.println(_T);
+    msg = pref + " " + _Ts + "    " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 void print_OD1()
 {
-  float OD1 = nodo.read_OD(SENSOR_OD1);
-  char tempod1[5];
-  String OD1s = dtostrf(OD1, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = "OD1:" + OD1s;
-  Serial.println(msg);
-  msg = "OD1: " + OD1s + "  " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    float OD1 = nodo.read_OD(SENSOR_OD1);
+    char tempod1[5];
+    String OD1s = dtostrf(OD1, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = "OD1:" + OD1s;
+    Serial.println(msg);
+    msg = "OD1: " + OD1s + "  " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 
 void on_item3_selected(MenuItem* p_menu_item)
 {
-  print_OD2();
-  print_T2();
+    print_OD2();
+    print_T2();
 }
 
 void print_OD2()
 {
-  float OD2 = nodo.read_OD(SENSOR_OD2);
-  char tempod1[5];
-  String OD2s = dtostrf(OD2, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = "OD2:" + OD2s;
-  Serial.println(msg);
-  msg = "OD2: " + OD2s + "  " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    float OD2 = nodo.read_OD(SENSOR_OD2);
+    char tempod1[5];
+    String OD2s = dtostrf(OD2, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = "OD2:" + OD2s;
+    Serial.println(msg);
+    msg = "OD2: " + OD2s + "  " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 
 void on_item4_selected(MenuItem* p_menu_item)
 {
-  print_OD3();
-  print_T3();
+    print_OD3();
+    print_T3();
 }
 
 void print_OD3()
 {
-  float OD3 = nodo.read_OD(SENSOR_OD3);
-  char tempod1[5];
-  String OD3s = dtostrf(OD3, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = "OD3:" + OD3s;
-  Serial.println(msg);
-  msg = "OD3: " + OD3s + "  " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    float OD3 = nodo.read_OD(SENSOR_OD3);
+    char tempod1[5];
+    String OD3s = dtostrf(OD3, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = "OD3:" + OD3s;
+    Serial.println(msg);
+    msg = "OD3: " + OD3s + "  " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 
 void on_item5_selected(MenuItem* p_menu_item)
 {
-  print_OD4();
-  print_T4();
+    print_OD4();
+    print_T4();
 }
 
 void print_OD4()
 {
-  float OD4 = nodo.read_OD(SENSOR_OD4);
-  char tempod1[5];
-  String OD4s = dtostrf(OD4, 1, 2, tempod1);
-  lcd.setCursor(0,1);
-  String msg = "OD4:" + OD4s;
-  Serial.println(msg);
-  msg = "OD4: " + OD4s + "  " ;
-  lcd.print(msg);
-  delay(3000); // so we can look the result on the LCD
+    float OD4 = nodo.read_OD(SENSOR_OD4);
+    char tempod1[5];
+    String OD4s = dtostrf(OD4, 1, 2, tempod1);
+    lcd.setCursor(0,1);
+    String msg = "OD4:" + OD4s;
+    Serial.println(msg);
+    msg = "OD4: " + OD4s + "  " ;
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
 }
 
 void on_cal1_selected(MenuItem* p_menu_item)
 {
-  lcd.setCursor(0,1);
-  lcd.print("Cal pH @4  ");
-  delay(1500);
-  lcd.setCursor(0,1);
-  lcd.print("Cal pH @7  ");
-  delay(1500);
-  lcd.setCursor(0,1);
-  lcd.print("Cal pH @10 ");
-  delay(1500);
+    lcd.setCursor(0,1);
+    lcd.print("Cal pH @4  ");
+    delay(1500);
+    lcd.setCursor(0,1);
+    lcd.print("Cal pH @7  ");
+    delay(1500);
+    lcd.setCursor(0,1);
+    lcd.print("Cal pH @10 ");
+    delay(1500);
 }
 
 void on_cal2_selected(MenuItem* p_menu_item)
 {
-  lcd.setCursor(0,1);
-  lcd.print("Cal OD 1  ");
-  delay(1500); // so we can look the result on the LCD
+    lcd.setCursor(0,1);
+    lcd.print("Cal OD 1  ");
+    delay(1500); // so we can look the result on the LCD
 }
 
 void on_cal3_selected(MenuItem* p_menu_item)
 {
-  lcd.setCursor(0,1);
-  lcd.print("Cal OD 2  ");
-  delay(1500); // so we can look the result on the LCD
+    lcd.setCursor(0,1);
+    lcd.print("Cal OD 2  ");
+    delay(1500); // so we can look the result on the LCD
 }
 
 void on_cal4_selected(MenuItem* p_menu_item)
 {
-  lcd.setCursor(0,1);
-  lcd.print("Cal OD 3  ");
-  delay(1500); // so we can look the result on the LCD
+    lcd.setCursor(0,1);
+    lcd.print("Cal OD 3  ");
+    delay(1500); // so we can look the result on the LCD
 }
 
 void on_cal5_selected(MenuItem* p_menu_item)
 {
-  lcd.setCursor(0,1);
-  lcd.print("Cal OD 4  ");
-  delay(1500); // so we can look the result on the LCD
+    lcd.setCursor(0,1);
+    lcd.print("Cal OD 4  ");
+    delay(1500); // so we can look the result on the LCD
 }
 
 void inicializar_botones() {
-  attachInterrupt(0, ISR_S, CHANGE);
-  attachInterrupt(1, ISR_W, CHANGE);
-  attachInterrupt(4, ISR_D, CHANGE);
-  attachInterrupt(5, ISR_A, CHANGE);
+    attachInterrupt(0, ISR_S, CHANGE);
+    attachInterrupt(1, ISR_W, CHANGE);
+    attachInterrupt(4, ISR_D, CHANGE);
+    attachInterrupt(5, ISR_A, CHANGE);
 }
 
 void ISR_W()
 {
-  BOTON_OPRIMIDO = true;
-  BOTON_NOMBRE = 'w';
+    BOTON_OPRIMIDO = true;
+    BOTON_NOMBRE = 'w';
 }
 void ISR_S()
 {
-  BOTON_OPRIMIDO = true;
-  BOTON_NOMBRE = 's';
+    BOTON_OPRIMIDO = true;
+    BOTON_NOMBRE = 's';
 }
 void ISR_A()
 {
-  BOTON_OPRIMIDO = true;
-  BOTON_NOMBRE = 'a';
+    BOTON_OPRIMIDO = true;
+    BOTON_NOMBRE = 'a';
 }
 void ISR_D()
 {
-  BOTON_OPRIMIDO = true;
-  BOTON_NOMBRE = 'd';
+    BOTON_OPRIMIDO = true;
+    BOTON_NOMBRE = 'd';
 }
 
 void inicializar_seriales() {
-  if (inicial) {
-    nodo.modo_standby();
-    inicial=false;
-  }
+    if (inicial) {
+        nodo.modo_standby();
+        inicial=false;
+    }
 
 }
 void printAddress(DeviceAddress deviceAddress)
 {
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    // zero pad the address if necessary
-    if (deviceAddress[i] < 16) Serial.print("0");
-    Serial.print(deviceAddress[i], HEX);
-  }
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        // zero pad the address if necessary
+        if (deviceAddress[i] < 16) Serial.print("0");
+        Serial.print(deviceAddress[i], HEX);
+    }
 }
 
 void printTemperature(DeviceAddress deviceAddress)
 {
-  float tempC = sensoresT.getTempC(deviceAddress);
-  Serial.print(tempC);
-  Serial.print(" °C");
+    float tempC = sensoresT.getTempC(deviceAddress);
+    Serial.print(tempC);
+    Serial.print(" °C");
 }
 
 // main function to print information about a device
 void printData(DeviceAddress deviceAddress)
 {
-  Serial.print("Sensor: ");
-  printAddress(deviceAddress);
-  Serial.print(" ");
-  printTemperature(deviceAddress);
-  Serial.println();
+    Serial.print("Sensor: ");
+    printAddress(deviceAddress);
+    Serial.print(" ");
+    printTemperature(deviceAddress);
+    Serial.println();
 }
 void inicializar_sensores() {
-  nodo.configura_pins_pH(RX_PH, TX_PH);
-  SENSOR_OD1 = nodo.pon_sensor_OD(RX_OD_1, TX_OD_1);
-  SENSOR_OD2 = nodo.pon_sensor_OD(RX_OD_2, TX_OD_2);
-  SENSOR_OD3 = nodo.pon_sensor_OD(RX_OD_3, TX_OD_3);
-  SENSOR_OD4 = nodo.pon_sensor_OD(RX_OD_4, TX_OD_4);
+    nodo.configura_pins_pH(RX_PH, TX_PH);
+    SENSOR_OD1 = nodo.pon_sensor_OD(RX_OD_1, TX_OD_1);
+    SENSOR_OD2 = nodo.pon_sensor_OD(RX_OD_2, TX_OD_2);
+    SENSOR_OD3 = nodo.pon_sensor_OD(RX_OD_3, TX_OD_3);
+    SENSOR_OD4 = nodo.pon_sensor_OD(RX_OD_4, TX_OD_4);
 
-  sensoresT.begin();
-  Serial.print(sensoresT.getDeviceCount(), DEC);
-  Serial.println(" dispositivos.");
-  Serial.print("    Sensor temperatura 1: ");
-  printAddress(termo1);
-  Serial.println();
-  Serial.print("    Sensor temperatura 2: ");
-  printAddress(termo2);
-  Serial.println();
-  Serial.print("    Sensor temperatura 3: ");
-  printAddress(termo3);
-  Serial.println();
-  Serial.print("    Sensor temperatura 4: ");
-  printAddress(termo4);
-  Serial.println();
-  sensoresT.requestTemperatures();
+    sensoresT.begin();
+    Serial.print(sensoresT.getDeviceCount(), DEC);
+    Serial.println(" dispositivos.");
+    Serial.print("    Sensor temperatura 1: ");
+    printAddress(termo1);
+    Serial.println();
+    Serial.print("    Sensor temperatura 2: ");
+    printAddress(termo2);
+    Serial.println();
+    Serial.print("    Sensor temperatura 3: ");
+    printAddress(termo3);
+    Serial.println();
+    Serial.print("    Sensor temperatura 4: ");
+    printAddress(termo4);
+    Serial.println();
+    sensoresT.requestTemperatures();
 }
 
 void setup()
 {
 
-  inicializar_sensores();
-  nodo.begin();
-  inicializar_botones();
-  inicializar_seriales();
+    inicializar_sensores();
+    nodo.begin();
+    Serial.println("TanTan Nodo Acuicola v0.1");
+    inicializar_botones();
+    inicializar_seriales();
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-  serialPrintHelp();
-  Serial.println("Construyendo menu.");
-  // Menu setup
-  /*
+    //serialPrintHelp();
+    Serial.println("Construyendo menu.");
+    // Menu setup
+    /*
        Menu Structure:
-   -Estanque1
-   --pH
-   -Estanque2
-   -Estanque3
-   -Estanque4
-   -Calibrar
-   --pH
-   --OD1
-   --OD2
-   --OD3
-   --OD4   
-   */
-  mm.add_menu(&mpH1);
-  mpH1.add_item(&mpH1_mi1, &on_item1_selected);
-  mpH1.add_item(&mpH1_mi2, &on_item2_selected);
-  mpH1.add_item(&mpH1_mi3, &on_item3_selected);
-  mpH1.add_item(&mpH1_mi4, &on_item4_selected);
-//  mm.add_item(&mm_mi1, &on_item1_selected);
-  mm.add_item(&mm_mi2, &on_item2_selected);
-  mm.add_item(&mm_mi3, &on_item3_selected);
-  mm.add_item(&mm_mi4, &on_item4_selected);
-  mm.add_item(&mm_mi5, &on_item5_selected);
-  mm.add_menu(&mu1);
-  mu1.add_menu(&mpH1);
-//  mu1.add_item(&mu1_mi1, &on_cal1_selected);
-  mu1.add_item(&mu1_mi2, &on_cal2_selected);
-  mu1.add_item(&mu1_mi3, &on_cal3_selected);
-  mu1.add_item(&mu1_mi4, &on_cal4_selected);
-  mu1.add_item(&mu1_mi5, &on_cal5_selected);
-  ms.set_root_menu(&mm);
-  Serial.println("Menu construido.");
-  displayMenu();
-  print_all();
-  displayMenu();
+       -Estanque1
+       --pH
+       -Estanque2
+       -Estanque3
+       -Estanque4
+       -Calibrar
+       --pH
+       --OD1
+       --OD2
+       --OD3
+       --OD4
+     */
+    mm.add_menu(&mpH1);
+    mpH1.add_item(&mpH1_mi1, &on_item1_selected);
+    mpH1.add_item(&mpH1_mi2, &on_item2_selected);
+    mpH1.add_item(&mpH1_mi3, &on_item3_selected);
+    mpH1.add_item(&mpH1_mi4, &on_item4_selected);
+    //  mm.add_item(&mm_mi1, &on_item1_selected);
+    mm.add_item(&mm_mi2, &on_item2_selected);
+    mm.add_item(&mm_mi3, &on_item3_selected);
+    mm.add_item(&mm_mi4, &on_item4_selected);
+    mm.add_item(&mm_mi5, &on_item5_selected);
+    mm.add_menu(&mu1);
+    mu1.add_menu(&mpH1);
+    //  mu1.add_item(&mu1_mi1, &on_cal1_selected);
+    mu1.add_item(&mu1_mi2, &on_cal2_selected);
+    mu1.add_item(&mu1_mi3, &on_cal3_selected);
+    mu1.add_item(&mu1_mi4, &on_cal4_selected);
+    mu1.add_item(&mu1_mi5, &on_cal5_selected);
+    ms.set_root_menu(&mm);
+    Serial.println("Menu construido.");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    // Display the menu
+    lcd.print("Nodo Acuicola   ");
+    lcd.setCursor(0,1);
+    lcd.print("TanTan v0.1     ");
+    delay(2500);
+    displayMenu();
+    print_all();
+    displayMenu();
 }
 
 void print_all()
 {
-  print_T1();
-  print_T2();
-  print_T3();
-  print_T4();
-//  print_pH();
-//  print_OD1();
-//  print_OD2();
-//  print_OD3();
-//  print_OD4();
+    print_T1();
+    print_T2();
+    print_T3();
+    print_T4();
+    //  print_pH();
+    //  print_OD1();
+    //  print_OD2();
+    //  print_OD3();
+    //  print_OD4();
 }
 
 void loop()
 {
-  sensoresT.requestTemperatures();
-  // Handle serial commands
-  buttonHandler();
-  serialHandler();
-  // Wait for two seconds so the output is viewable
-  delay(1000);
+    sensoresT.requestTemperatures();
+    // Handle serial commands
+    buttonHandler();
+    serialHandler();
+    // Wait for two seconds so the output is viewable
+    delay(1000);
 }
 
 void buttonHandler() {
-  if (BOTON_OPRIMIDO) {
-    BOTON_OPRIMIDO = false;
-//    Serial.print("Boton ");
-//    Serial.println((char)BOTON_NOMBRE);
-    switch((char)BOTON_NOMBRE) {
-    case 'w': // Previus item
-      ms.prev();
-      displayMenu();
-      break;
-    case 's': // Next item
-      ms.next();
-      displayMenu();
-      break;
-    case 'a': // Back presed
-      ms.back();
-      displayMenu();
-      break;
-    case 'd': // Select presed
-      ms.select();
-      displayMenu();
-      break;
+    if (BOTON_OPRIMIDO) {
+        BOTON_OPRIMIDO = false;
+        //    Serial.print("Boton ");
+        //    Serial.println((char)BOTON_NOMBRE);
+        switch((char)BOTON_NOMBRE) {
+            case 'w': // Previus item
+                ms.prev();
+                displayMenu();
+                break;
+            case 's': // Next item
+                ms.next();
+                displayMenu();
+                break;
+            case 'a': // Back presed
+                ms.back();
+                displayMenu();
+                break;
+            case 'd': // Select presed
+                ms.select();
+                displayMenu();
+                break;
+        }
     }
-  }
 }
 
 void displayMenu() {
-  lcd.clear();
-  lcd.setCursor(0,0);
-  // Display the menu
-  Menu const* cp_menu = ms.get_current_menu();
-  lcd.print(cp_menu->get_name());
+    lcd.clear();
+    lcd.setCursor(0,0);
+    // Display the menu
+    Menu const* cp_menu = ms.get_current_menu();
+    lcd.print(cp_menu->get_name());
 
-  lcd.setCursor(0,1);
-  lcd.print(cp_menu->get_selected()->get_name());
+    lcd.setCursor(0,1);
+    lcd.print(cp_menu->get_selected()->get_name());
 }
 
 void serialHandler() {
-  char inChar;
-  if((inChar = Serial.read())>0) {
-    switch (inChar) {
-    case 'w': // Previus item
-      ms.prev();
-      displayMenu();
-      break;
-    case 's': // Next item
-      ms.next();
-      displayMenu();
-      break;
-    case 'a': // Back presed
-      ms.back();
-      displayMenu();
-      break;
-    case 'd': // Select presed
-      ms.select();
-      displayMenu();
-      break;
-    case '0': // pH
-      print_pH();
-      displayMenu();
-      break;
-    case '1': // pH
-      print_OD1();
-      displayMenu();
-      break;
-    case '2': // pH
-      print_OD2();
-      displayMenu();
-      break;
-    case '3': // pH
-      print_OD3();
-      displayMenu();
-      break;
-    case '4': // pH
-      print_OD4();
-      displayMenu();
-      break;
-    case '?':
-    case 'h': // Display help
-      serialPrintHelp();
-      break;
-    default:
-      break;
+    char inChar;
+    if((inChar = Serial.read())>0) {
+        switch (inChar) {
+            case 'w': // Previus item
+                ms.prev();
+                displayMenu();
+                break;
+            case 's': // Next item
+                ms.next();
+                displayMenu();
+                break;
+            case 'a': // Back presed
+                ms.back();
+                displayMenu();
+                break;
+            case 'd': // Select presed
+                ms.select();
+                displayMenu();
+                break;
+            case '0': // pH
+                print_pH();
+                displayMenu();
+                break;
+            case '1': // pH
+                print_OD1();
+                displayMenu();
+                break;
+            case '2': // pH
+                print_OD2();
+                displayMenu();
+                break;
+            case '3': // pH
+                print_OD3();
+                displayMenu();
+                break;
+            case '4': // pH
+                print_OD4();
+                displayMenu();
+                break;
+            case '?':
+            case 'h': // Display help
+                serialPrintHelp();
+                break;
+            default:
+                break;
+        }
     }
-  }
 }
 
 void serialPrintHelp() {
-  Serial.println("***************");
-  Serial.println("w: go to previus item (up)");
-  Serial.println("s: go to next item (down)");
-  Serial.println("a: go back (right)");
-  Serial.println("d: select \"selected\" item");
-  Serial.println("?: print this help");
-  Serial.println("h: print this help");
-  Serial.println("***************");
+    Serial.println("***************");
+    Serial.println("w: go to previus item (up)");
+    Serial.println("s: go to next item (down)");
+    Serial.println("a: go back (right)");
+    Serial.println("d: select \"selected\" item");
+    Serial.println("?: print this help");
+    Serial.println("h: print this help");
+    Serial.println("***************");
 }
-
-
-

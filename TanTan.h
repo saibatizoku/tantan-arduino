@@ -38,11 +38,11 @@ class Nodo
 
         void configura_pins_pH (int rx, int tx);
         int pon_sensor_OD (int rx, int tx);
-        void begin();
-        void modo_standby();
+        void begin ();
+        void modo_standby ();
 
-        float read_pH();
-        float read_pH(float temp);
+        float read_pH ();
+        float read_pH (float temp);
         float read_OD (int num_sensor);
 
     private:

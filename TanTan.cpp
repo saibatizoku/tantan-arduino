@@ -31,19 +31,6 @@
 
 Nodo::Nodo ()
 {
-    DeviceAddress termo1 = { 0x28, 0x80, 0x04, 0xFB, 0x04, 0x00, 0x00, 0x90 };
-    DeviceAddress termo2 = { 0x28, 0x30, 0x4D, 0xFB, 0x04, 0x00, 0x00, 0x8D };
-    DeviceAddress termo3 = { 0x28, 0x46, 0x9A, 0xFA, 0x04, 0x00, 0x00, 0x27 };
-    DeviceAddress termo4 = { 0x28, 0xC3, 0x82, 0xFA, 0x04, 0x00, 0x00, 0x64 };
-    float valor_pH;
-    float valor_OD1;
-    float valor_OD2;
-    float valor_OD3;
-    float valor_OD4;
-    float valor_T1;
-    float valor_T2;
-    float valor_T3;
-    float valor_T4;
 
     pins_pH_configurados = false;
 
@@ -120,15 +107,10 @@ void Nodo::begin ()
   if (pins_pH_configurados)
       pH_serial->begin(38400);
 
-  Serial.println("pH...");
-
   if (num_sensores_OD > 0) {
       int i;
       for (i = 0; i < num_sensores_OD; i++)
           sensores_OD[i]->begin(38400);
-          Serial.print("OD ");
-          Serial.print(i);
-          Serial.println("...");
   }
 }
 
