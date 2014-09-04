@@ -61,7 +61,7 @@ Nodo::~Nodo ()
 
 String Nodo::info()
 {
-    return nombre + " " + version; 
+    return nombre + " " + version;
 }
 
 void Nodo::configura_pins_pH (int rx, int tx)
@@ -91,6 +91,58 @@ crece_arreglo_de_SoftwareSerial (SoftwareSerial **arr, int n_elementos_existente
     delete[] arr;
 
     return nuevo_arr;
+}
+
+String Nodo::leer_sensor (String tipo, int idx, String comando)
+{
+    byte _rec = 0;
+    char _data[20];
+    char tempval[5];
+    float varval;
+    String varstr;
+
+    assert (idx >= 0);
+    assert (idx < num_sensores_OD);
+    assert (sizeof (comando) > 0);
+
+    if (tipo == "pH") {
+        assert (pins_pH_configurados != false);
+        pH_serial->listen ();
+        pH_serial->print (comando);
+
+        delay(280);
+        if (pH_serial->available() > 0) {
+        _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
+        _data[_rec] = 0;
+        }
+        if (comando == "r\r") {
+            varval = atof(_data);
+            varstr = dtostrf(atof(_data), 1, 2, tempval);
+            return varstr;
+        }
+        else {
+            return _data;
+        }
+    }
+    if (tipo == "OD") {
+        assert (num_sensores_OD > 0);
+        sensores_OD[idx]->listen ();
+        sensores_OD[idx]->print (comando);
+        delay(250);
+        if (sensores_OD[idx]->available() > 0) {
+            _rec = sensores_OD[idx]->readBytesUntil('\r', _data, sizeof (_data) - 1);
+            _data[_rec] = 0;
+        }
+        if (comando == "r\r") {
+            varval = atof(_data);
+            varstr = dtostrf(atof(_data), 1, 2, tempval);
+            return varstr;
+        }
+        else {
+            return _data;
+        }
+    }
+    return "";
 }
 
 int Nodo::pon_sensor_OD (int rx, int tx)
@@ -130,6 +182,10 @@ void Nodo::modo_standby ()
           sensores_OD[i]->print("e\r");
           delay(50);
           sensores_OD[i]->print("e\r");
+          Serial.print("OD");
+          Serial.print(i + 1);
+          Serial.print(": ");
+          Serial.println(Nodo::leer_sensor ("OD", i, "i\r"));
       }
   }
 
@@ -137,6 +193,8 @@ void Nodo::modo_standby ()
       pH_serial->print("e\r");
       delay(50);
       pH_serial->print("e\r");
+      Serial.print("pH: ");
+      Serial.println(Nodo::leer_sensor ("pH", 0, "i\r"));
   }
 }
 
