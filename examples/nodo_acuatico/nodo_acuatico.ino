@@ -51,12 +51,18 @@ OneWire dsWire(ONE_WIRE_BUS);
 DallasTemperature sensoresT(&dsWire);
 
 int SENSOR_OD1, SENSOR_OD2, SENSOR_OD3, SENSOR_OD4;
+int MUESTRAS_POR_LECTURA = 5;
 
-DeviceAddress termo1 = { 0x28, 0x80, 0x04, 0xFB, 0x04, 0x00, 0x00, 0x90 };
-DeviceAddress termo2 = { 0x28, 0x30, 0x4D, 0xFB, 0x04, 0x00, 0x00, 0x8D };
-DeviceAddress termo3 = { 0x28, 0x46, 0x9A, 0xFA, 0x04, 0x00, 0x00, 0x27 };
-DeviceAddress termo4 = { 0x28, 0xC3, 0x82, 0xFA, 0x04, 0x00, 0x00, 0x64 };
+DeviceAddress sensores_TEMP[4] = {
+    { 0x28, 0x80, 0x04, 0xFB, 0x04, 0x00, 0x00, 0x90 },
+    { 0x28, 0x30, 0x4D, 0xFB, 0x04, 0x00, 0x00, 0x8D },
+    { 0x28, 0x46, 0x9A, 0xFA, 0x04, 0x00, 0x00, 0x27 },
+    { 0x28, 0xC3, 0x82, 0xFA, 0x04, 0x00, 0x00, 0x64 } };
 
+int SENSOR_T1 = 0;
+int SENSOR_T2 = 1;
+int SENSOR_T3 = 2;
+int SENSOR_T4 = 3;
 int W_BUTTON = 18;
 int S_BUTTON = 19;
 int A_BUTTON = 2;
@@ -109,68 +115,37 @@ void print_pH()
 void on_item2_selected(MenuItem* p_menu_item)
 {
     print_OD1();
-    print_T1();
+    print_TEMP(SENSOR_T1);
 }
-void print_T1()
+
+float leer_temperatura (DeviceAddress *termo)
 {
-    //float T1 = nodo.read_T(sensoresT, termo1);
-    String pref = "T1:";
-    float _T = sensoresT.getTempC(termo1);
+    float suma = 0;
+    float lect = 0;
+    int i;
+    for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
+        lect = sensoresT.getTempC(*termo);
+        suma += lect;
+    }
+    return suma / (float)MUESTRAS_POR_LECTURA;
+}
+
+void print_TEMP (int idx)
+{
+    String pref = "T";
+    int numidx = idx + 1;
+    float _T = leer_temperatura(&sensores_TEMP[idx]);
     char tempod1[6];
     String _Ts = dtostrf(_T, 1, 2, tempod1);
     lcd.setCursor(0,1);
-    String msg = pref + _Ts;
-    Serial.print(pref);
+    String msg = pref  + ":"+ _Ts;
+    Serial.print(pref + String(numidx)+":");
     Serial.println(_T);
-    msg = pref + " " + _Ts + "    " ;
+    msg = pref + String(numidx) + ": " + _Ts + "    " ;
     lcd.print(msg);
     delay(1000); // so we can look the result on the LCD
 }
-void print_T2()
-{
-    //float T1 = nodo.read_T(sensoresT, termo1);
-    String pref = "T2:";
-    float _T = sensoresT.getTempC(termo2);
-    char tempod1[6];
-    String _Ts = dtostrf(_T, 1, 2, tempod1);
-    lcd.setCursor(0,1);
-    String msg = pref + _Ts;
-    Serial.print(pref);
-    Serial.println(_T);
-    msg = pref + " " + _Ts + "    " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
-}
-void print_T3()
-{
-    //float T1 = nodo.read_T(sensoresT, termo1);
-    String pref = "T3:";
-    float _T = sensoresT.getTempC(termo3);
-    char tempod1[6];
-    String _Ts = dtostrf(_T, 1, 2, tempod1);
-    lcd.setCursor(0,1);
-    String msg = pref + _Ts;
-    Serial.print(pref);
-    Serial.println(_T);
-    msg = pref + " " + _Ts + "    " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
-}
-void print_T4()
-{
-    //float T1 = nodo.read_T(sensoresT, termo1);
-    String pref = "T4:";
-    float _T = sensoresT.getTempC(termo4);
-    char tempod1[6];
-    String _Ts = dtostrf(_T, 1, 2, tempod1);
-    lcd.setCursor(0,1);
-    String msg = pref + _Ts;
-    Serial.print(pref);
-    Serial.println(_T);
-    msg = pref + " " + _Ts + "    " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
-}
+
 void print_OD1()
 {
     String OD1s = nodo.leer_sensor("OD", SENSOR_OD1);
@@ -185,7 +160,7 @@ void print_OD1()
 void on_item3_selected(MenuItem* p_menu_item)
 {
     print_OD2();
-    print_T2();
+    print_TEMP(SENSOR_T2);
 }
 
 void print_OD2()
@@ -202,7 +177,7 @@ void print_OD2()
 void on_item4_selected(MenuItem* p_menu_item)
 {
     print_OD3();
-    print_T3();
+    print_TEMP(SENSOR_T3);
 }
 
 void print_OD3()
@@ -219,7 +194,7 @@ void print_OD3()
 void on_item5_selected(MenuItem* p_menu_item)
 {
     print_OD4();
-    print_T4();
+    print_TEMP(SENSOR_T4);
 }
 
 void print_OD4()
@@ -346,16 +321,16 @@ void inicializar_sensores() {
     Serial.print(sensoresT.getDeviceCount(), DEC);
     Serial.println(" dispositivos.");
     Serial.print("    Sensor temperatura 1: ");
-    printAddress(termo1);
+    printAddress(sensores_TEMP[SENSOR_T1]);
     Serial.println();
     Serial.print("    Sensor temperatura 2: ");
-    printAddress(termo2);
+    printAddress(sensores_TEMP[SENSOR_T2]);
     Serial.println();
     Serial.print("    Sensor temperatura 3: ");
-    printAddress(termo3);
+    printAddress(sensores_TEMP[SENSOR_T3]);
     Serial.println();
     Serial.print("    Sensor temperatura 4: ");
-    printAddress(termo4);
+    printAddress(sensores_TEMP[SENSOR_T4]);
     Serial.println();
     sensoresT.requestTemperatures();
 }
@@ -418,10 +393,10 @@ void setup()
 
 void print_all()
 {
-    print_T1();
-    print_T2();
-    print_T3();
-    print_T4();
+    print_TEMP(SENSOR_T1);
+    print_TEMP(SENSOR_T2);
+    print_TEMP(SENSOR_T3);
+    print_TEMP(SENSOR_T4);
     //  print_pH();
     //  print_OD1();
     //  print_OD2();
@@ -514,6 +489,10 @@ void serialHandler() {
                 break;
             case '4': // pH
                 print_OD4();
+                displayMenu();
+                break;
+            case '5': // pH
+                print_all();
                 displayMenu();
                 break;
             case '?':
