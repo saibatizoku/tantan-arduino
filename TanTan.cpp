@@ -28,6 +28,8 @@
 #include "TanTan.h"
 
 
+String nombre = "Nodo Acuicola";
+String version = "v0.1";
 
 Nodo::Nodo ()
 {
@@ -55,6 +57,11 @@ Nodo::~Nodo ()
     sensores_OD = NULL;
 
     num_sensores_OD = 0;
+}
+
+String Nodo::info()
+{
+    return nombre + " " + version; 
 }
 
 void Nodo::configura_pins_pH (int rx, int tx)
@@ -103,6 +110,7 @@ int Nodo::pon_sensor_OD (int rx, int tx)
 void Nodo::begin ()
 {
   Serial.begin(38400);
+  Serial.println(Nodo::info());
   Serial.println("Iniciando...");
   if (pins_pH_configurados)
       pH_serial->begin(38400);

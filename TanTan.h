@@ -36,6 +36,7 @@ class Nodo
         Nodo();
         ~Nodo();
 
+        String info ();
         void configura_pins_pH (int rx, int tx);
         int pon_sensor_OD (int rx, int tx);
         void begin ();
