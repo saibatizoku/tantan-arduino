@@ -49,15 +49,23 @@ class Nodo
         float read_pH (float temp);
         float read_OD (int num_sensor);
 
+        void configura_bus_temperatura (DallasTemperature* _bus_temp);
+        void pedir_temperaturas ();
+        int contar_sensores_temperatura ();
+        float leer_temperatura (uint8_t* sensor);
+
     private:
         boolean pins_pH_configurados;
         int pin_rx_pH;
         int pin_tx_pH;
         SoftwareSerial *pH_serial;
+
         SoftwareSerial **sensores_pH;
         SoftwareSerial **sensores_OD;
         int num_sensores_pH;
         int num_sensores_OD;
+
+        DallasTemperature* bus_temp;
 };
 
 #endif

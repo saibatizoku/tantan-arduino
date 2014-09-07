@@ -34,7 +34,6 @@ String version = "v0.1";
 
 Nodo::Nodo ()
 {
-
     pins_pH_configurados = false;
     sensores_pH     = NULL;
     num_sensores_pH = 0;
@@ -69,7 +68,6 @@ Nodo::~Nodo ()
     delete[] sensores_pH;
     sensores_pH = NULL;
     num_sensores_pH = 0;
-
 }
 
 String Nodo::info()
@@ -286,4 +284,26 @@ float Nodo::read_OD (int num_sensor)
         _data[_rec] = 0;
     }
     return atof(_data);
+}
+
+void Nodo::configura_bus_temperatura (DallasTemperature* _bus_temp)
+{
+    bus_temp = _bus_temp;
+    bus_temp->begin ();
+    bus_temp->requestTemperatures ();
+}
+
+void Nodo::pedir_temperaturas ()
+{
+    bus_temp->requestTemperatures();
+}
+
+int Nodo::contar_sensores_temperatura ()
+{
+    return bus_temp->getDeviceCount();
+}
+
+float Nodo::leer_temperatura (uint8_t* sensor)
+{
+    return bus_temp->getTempC(sensor);
 }

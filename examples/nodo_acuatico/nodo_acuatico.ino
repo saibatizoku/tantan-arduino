@@ -47,8 +47,8 @@
 #define TX_OD_4 9
 
 int ONE_WIRE_BUS = 23;
-OneWire dsWire(ONE_WIRE_BUS);
-DallasTemperature sensoresT(&dsWire);
+OneWire _wire (ONE_WIRE_BUS);
+DallasTemperature BUS_TEMPERATURA (&_wire);
 
 int SENSOR_OD1, SENSOR_OD2, SENSOR_OD3, SENSOR_OD4;
 int MUESTRAS_POR_LECTURA = 5;
@@ -102,7 +102,7 @@ float tomar_muestra_temperatura (int num_sensor)
     int i;
     float suma = 0;
     for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
-        suma += sensoresT.getTempC(sensores_TEMP[num_sensor]);
+        suma += nodo.leer_temperatura(sensores_TEMP[num_sensor]);
     }
     return suma / (float)MUESTRAS_POR_LECTURA;
 }
@@ -279,7 +279,7 @@ void printAddress(DeviceAddress deviceAddress)
 
 void printTemperature(DeviceAddress deviceAddress)
 {
-    float tempC = sensoresT.getTempC(deviceAddress);
+    float tempC = nodo.leer_temperatura(deviceAddress);
     Serial.print(tempC);
     Serial.print(" °C");
 }
@@ -294,17 +294,15 @@ void printData(DeviceAddress deviceAddress)
     Serial.println();
 }
 void configurar_sensores() {
-    sensoresT.begin();
-    sensoresT.requestTemperatures();
-
-    nodo.configura_pins_pH(RX_PH, TX_PH);
-    SENSOR_OD1 = nodo.pon_sensor_OD(RX_OD_1, TX_OD_1);
-    SENSOR_OD2 = nodo.pon_sensor_OD(RX_OD_2, TX_OD_2);
-    SENSOR_OD3 = nodo.pon_sensor_OD(RX_OD_3, TX_OD_3);
-    SENSOR_OD4 = nodo.pon_sensor_OD(RX_OD_4, TX_OD_4);
+    nodo.configura_pins_pH (RX_PH, TX_PH);
+    nodo.configura_bus_temperatura (&BUS_TEMPERATURA);
+    SENSOR_OD1 = nodo.pon_sensor_OD (RX_OD_1, TX_OD_1);
+    SENSOR_OD2 = nodo.pon_sensor_OD (RX_OD_2, TX_OD_2);
+    SENSOR_OD3 = nodo.pon_sensor_OD (RX_OD_3, TX_OD_3);
+    SENSOR_OD4 = nodo.pon_sensor_OD (RX_OD_4, TX_OD_4);
 }
 void imprimir_info() {
-    Serial.print(sensoresT.getDeviceCount(), DEC);
+    Serial.print(nodo.contar_sensores_temperatura (), DEC);
     Serial.println(" DS18B20");
     Serial.print("T1: ");
     printAddress(sensores_TEMP[SENSOR_T1]);
@@ -395,7 +393,7 @@ void imprimir_datos_todos()
 
 void loop()
 {
-    sensoresT.requestTemperatures();
+    nodo.pedir_temperaturas();
     // Handle serial commands
     buttonHandler();
     serialHandler();
