@@ -31,10 +31,13 @@
 String nombre = "Nodo Acuicola";
 String version = "v0.1";
 
+
 Nodo::Nodo ()
 {
 
     pins_pH_configurados = false;
+    sensores_pH     = NULL;
+    num_sensores_pH = 0;
 
     sensores_OD     = NULL;
     num_sensores_OD = 0;
@@ -53,10 +56,20 @@ Nodo::~Nodo ()
         delete sensores_OD[i];
         sensores_OD[i] = NULL;
     }
+
+    for (i = 0; i < num_sensores_pH; i++) {
+        delete sensores_pH[i];
+        sensores_pH[i] = NULL;
+    }
+
     delete[] sensores_OD;
     sensores_OD = NULL;
-
     num_sensores_OD = 0;
+
+    delete[] sensores_pH;
+    sensores_pH = NULL;
+    num_sensores_pH = 0;
+
 }
 
 String Nodo::info()
@@ -145,18 +158,41 @@ String Nodo::leer_sensor (String tipo, int idx, String comando)
     return "";
 }
 
-int Nodo::pon_sensor_OD (int rx, int tx)
+int Nodo::pon_sensor_serial (String tipo, int rx, int tx)
 {
     SoftwareSerial *sensor = new SoftwareSerial (rx, tx, false);
     int indice;
 
-    sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
+    assert (rx >= 0);
+    assert (tx >= 0);
+    assert (rx != tx);
+    assert ((tipo == "OD") | (tipo == "pH"));
 
-    indice = num_sensores_OD;
-    sensores_OD[indice] = sensor;
-    num_sensores_OD++;
+    if (tipo == "OD") {
+        sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
+
+        indice = num_sensores_OD;
+        sensores_OD[indice] = sensor;
+        num_sensores_OD++;
+    } else if (tipo == "pH") {
+        sensores_pH = crece_arreglo_de_SoftwareSerial (sensores_pH, num_sensores_pH);
+
+        indice = num_sensores_pH;
+        sensores_pH[indice] = sensor;
+        num_sensores_pH++;
+    }
 
     return indice;
+}
+
+int Nodo::pon_sensor_OD (int rx, int tx)
+{
+    return pon_sensor_serial ("OD", rx, tx);
+}
+
+int Nodo::pon_sensor_pH (int rx, int tx)
+{
+    return pon_sensor_serial ("pH", rx, tx);
 }
 
 void Nodo::begin ()

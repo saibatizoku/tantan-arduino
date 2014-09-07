@@ -38,7 +38,9 @@ class Nodo
 
         String info ();
         void configura_pins_pH (int rx, int tx);
+        int pon_sensor_serial (String tipo, int rx, int tx);
         int pon_sensor_OD (int rx, int tx);
+        int pon_sensor_pH (int rx, int tx);
         void begin ();
         void modo_standby ();
 
@@ -52,8 +54,9 @@ class Nodo
         int pin_rx_pH;
         int pin_tx_pH;
         SoftwareSerial *pH_serial;
-
+        SoftwareSerial **sensores_pH;
         SoftwareSerial **sensores_OD;
+        int num_sensores_pH;
         int num_sensores_OD;
 };
 
