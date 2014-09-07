@@ -96,116 +96,106 @@ Nodo nodo;
 volatile boolean BOTON_OPRIMIDO = false;
 volatile int BOTON_NOMBRE;
 
-void on_item1_selected(MenuItem* p_menu_item)
-{
-    print_pH();
-}
 
-void print_pH()
+float tomar_muestra_temperatura (int num_sensor)
 {
-    String pHs = nodo.leer_sensor("pH");
-    String msg = "pH:" + pHs;
-    Serial.println(msg);
-    msg = "pH: " + pHs + "     ";
-    lcd.setCursor(0,1);
-    lcd.print(msg);
-    delay(1500); // so we can look the result on the LCD
-}
-
-void on_item2_selected(MenuItem* p_menu_item)
-{
-    print_OD1();
-    print_TEMP(SENSOR_T1);
-}
-
-float leer_temperatura (DeviceAddress *termo)
-{
-    float suma = 0;
-    float lect = 0;
     int i;
+    float suma = 0;
     for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
-        lect = sensoresT.getTempC(*termo);
-        suma += lect;
+        suma += sensoresT.getTempC(sensores_TEMP[num_sensor]);
     }
     return suma / (float)MUESTRAS_POR_LECTURA;
+}
+
+float leer_muestra (int num_sensor, String tipo_sensor)
+{
+    int i;
+    float suma = 0;
+    if (tipo_sensor.equals("T")) {
+        return tomar_muestra_temperatura (num_sensor);
+    } else if (tipo_sensor.equals("OD")) {
+        for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
+            suma += nodo.read_OD(num_sensor);
+        }
+        return suma / (float)MUESTRAS_POR_LECTURA;
+    } else if (tipo_sensor.equals("pH")) {
+        for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
+            suma += nodo.read_pH();
+        }
+        return suma / (float)MUESTRAS_POR_LECTURA;
+    }
+    return 0.0;
 }
 
 void print_TEMP (int idx)
 {
     String pref = "T";
     int numidx = idx + 1;
-    float _T = leer_temperatura(&sensores_TEMP[idx]);
+    float _T = leer_muestra(idx, "T");
     char tempod1[6];
     String _Ts = dtostrf(_T, 1, 2, tempod1);
-    lcd.setCursor(0,1);
     String msg = pref  + ":"+ _Ts;
     Serial.print(pref + String(numidx)+":");
     Serial.println(_T);
     msg = pref + String(numidx) + ": " + _Ts + "    " ;
+    lcd.setCursor(0,1);
     lcd.print(msg);
     delay(1000); // so we can look the result on the LCD
 }
 
-void print_OD1()
+void print_OD (int idx)
 {
-    String OD1s = nodo.leer_sensor("OD", SENSOR_OD1);
-    lcd.setCursor(0,1);
-    String msg = "OD1:" + OD1s;
+    float _var = leer_muestra(idx, "OD");
+    char tempod1[6];
+    String _Ts = dtostrf(_var, 1, 2, tempod1);
+    String msg = "OD" + String(idx+1) + ":"+ _Ts;
     Serial.println(msg);
-    msg = "OD1: " + OD1s + "  " ;
+    msg = "OD" + String(idx+1) + ": " + _Ts + "    " ;
+    lcd.setCursor(0,1);
     lcd.print(msg);
     delay(1000); // so we can look the result on the LCD
+}
+
+void print_pH()
+{
+    float _var = leer_muestra(0, "pH");
+    char tempod1[6];
+    String pHs = dtostrf(_var, 1, 2, tempod1);
+    String msg = "pH:" + pHs;
+    Serial.println(msg);
+    msg = "pH: " + pHs + "     ";
+    lcd.setCursor(0,1);
+    lcd.print(msg);
+    delay(1000); // so we can look the result on the LCD
+}
+
+void on_item1_selected(MenuItem* p_menu_item)
+{
+    print_pH();
+}
+
+void on_item2_selected(MenuItem* p_menu_item)
+{
+    print_OD (SENSOR_OD1);
+    print_TEMP (SENSOR_T1);
 }
 
 void on_item3_selected(MenuItem* p_menu_item)
 {
-    print_OD2();
+    print_OD (SENSOR_OD2);
     print_TEMP(SENSOR_T2);
-}
-
-void print_OD2()
-{
-    String OD2s = nodo.leer_sensor("OD", SENSOR_OD2);
-    lcd.setCursor(0,1);
-    String msg = "OD2:" + OD2s;
-    Serial.println(msg);
-    msg = "OD2: " + OD2s + "  " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
 }
 
 void on_item4_selected(MenuItem* p_menu_item)
 {
-    print_OD3();
+    print_OD (SENSOR_OD3);
     print_TEMP(SENSOR_T3);
-}
-
-void print_OD3()
-{
-    String OD3s = nodo.leer_sensor("OD", SENSOR_OD3);
-    lcd.setCursor(0,1);
-    String msg = "OD3:" + OD3s;
-    Serial.println(msg);
-    msg = "OD3: " + OD3s + "  " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
 }
 
 void on_item5_selected(MenuItem* p_menu_item)
 {
-    print_OD4();
+    print_OD (SENSOR_OD4);
     print_TEMP(SENSOR_T4);
-}
-
-void print_OD4()
-{
-    String OD4s = nodo.leer_sensor("OD", SENSOR_OD4);
-    lcd.setCursor(0,1);
-    String msg = "OD4:" + OD4s;
-    Serial.println(msg);
-    msg = "OD4: " + OD4s + "  " ;
-    lcd.print(msg);
-    delay(1000); // so we can look the result on the LCD
 }
 
 void on_cal1_selected(MenuItem* p_menu_item)
@@ -249,7 +239,7 @@ void on_cal5_selected(MenuItem* p_menu_item)
     delay(1500); // so we can look the result on the LCD
 }
 
-void inicializar_botones() {
+void configurar_botones() {
     attachInterrupt(0, ISR_S, CHANGE);
     attachInterrupt(1, ISR_W, CHANGE);
     attachInterrupt(4, ISR_D, CHANGE);
@@ -277,13 +267,6 @@ void ISR_D()
     BOTON_NOMBRE = 'd';
 }
 
-void inicializar_seriales() {
-    if (inicial) {
-        nodo.modo_standby();
-        inicial=false;
-    }
-
-}
 void printAddress(DeviceAddress deviceAddress)
 {
     for (uint8_t i = 0; i < 8; i++)
@@ -310,42 +293,35 @@ void printData(DeviceAddress deviceAddress)
     printTemperature(deviceAddress);
     Serial.println();
 }
-void inicializar_sensores() {
+void configurar_sensores() {
+    sensoresT.begin();
+    sensoresT.requestTemperatures();
+
     nodo.configura_pins_pH(RX_PH, TX_PH);
     SENSOR_OD1 = nodo.pon_sensor_OD(RX_OD_1, TX_OD_1);
     SENSOR_OD2 = nodo.pon_sensor_OD(RX_OD_2, TX_OD_2);
     SENSOR_OD3 = nodo.pon_sensor_OD(RX_OD_3, TX_OD_3);
     SENSOR_OD4 = nodo.pon_sensor_OD(RX_OD_4, TX_OD_4);
-
-    sensoresT.begin();
+}
+void imprimir_info() {
     Serial.print(sensoresT.getDeviceCount(), DEC);
-    Serial.println(" dispositivos.");
-    Serial.print("    Sensor temperatura 1: ");
+    Serial.println(" DS18B20");
+    Serial.print("T1: ");
     printAddress(sensores_TEMP[SENSOR_T1]);
     Serial.println();
-    Serial.print("    Sensor temperatura 2: ");
+    Serial.print("T2: ");
     printAddress(sensores_TEMP[SENSOR_T2]);
     Serial.println();
-    Serial.print("    Sensor temperatura 3: ");
+    Serial.print("T3: ");
     printAddress(sensores_TEMP[SENSOR_T3]);
     Serial.println();
-    Serial.print("    Sensor temperatura 4: ");
+    Serial.print("T4: ");
     printAddress(sensores_TEMP[SENSOR_T4]);
     Serial.println();
-    sensoresT.requestTemperatures();
 }
 
-void setup()
+void configurar_menu ()
 {
-
-    inicializar_sensores();
-    nodo.begin();
-    inicializar_botones();
-    inicializar_seriales();
-
-    lcd.begin(16, 2);
-
-    //serialPrintHelp();
     Serial.println("Construyendo menu.");
     // Menu setup
     /*
@@ -381,6 +357,18 @@ void setup()
     mu1.add_item(&mu1_mi5, &on_cal5_selected);
     ms.set_root_menu(&mm);
     Serial.println("Menu construido.");
+}
+
+void setup()
+{
+    configurar_botones();
+    configurar_sensores();
+
+    nodo.begin();
+    imprimir_info();
+    configurar_menu();
+
+    lcd.begin(16, 2);
     lcd.clear();
     lcd.setCursor(0,0);
     // Display the menu
@@ -388,20 +376,21 @@ void setup()
     lcd.setCursor(0,1);
     lcd.print("TanTan v0.1     ");
     delay(2500);
+    ms.next();
     displayMenu();
 }
 
-void print_all()
+void imprimir_datos_todos()
 {
     print_TEMP(SENSOR_T1);
+    print_OD (SENSOR_OD1);
     print_TEMP(SENSOR_T2);
+    print_OD (SENSOR_OD2);
     print_TEMP(SENSOR_T3);
+    print_OD (SENSOR_OD3);
     print_TEMP(SENSOR_T4);
+    print_OD (SENSOR_OD4);
     //  print_pH();
-    //  print_OD1();
-    //  print_OD2();
-    //  print_OD3();
-    //  print_OD4();
 }
 
 void loop()
@@ -476,23 +465,23 @@ void serialHandler() {
                 displayMenu();
                 break;
             case '1': // pH
-                print_OD1();
+                print_OD (SENSOR_OD1);
                 displayMenu();
                 break;
             case '2': // pH
-                print_OD2();
+                print_OD (SENSOR_OD2);
                 displayMenu();
                 break;
             case '3': // pH
-                print_OD3();
+                print_OD (SENSOR_OD3);
                 displayMenu();
                 break;
             case '4': // pH
-                print_OD4();
+                print_OD (SENSOR_OD4);
                 displayMenu();
                 break;
             case '5': // pH
-                print_all();
+                imprimir_datos_todos();
                 displayMenu();
                 break;
             case '?':
