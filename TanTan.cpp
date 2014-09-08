@@ -206,6 +206,7 @@ void Nodo::begin ()
       for (i = 0; i < num_sensores_OD; i++)
           sensores_OD[i]->begin(38400);
   }
+  modo_standby ();
 }
 
 void Nodo::modo_standby ()
@@ -214,6 +215,8 @@ void Nodo::modo_standby ()
       int i;
       for (i = 0; i < num_sensores_OD; i++) {
           sensores_OD[i]->print("e\r");
+          delay(50);
+          sensores_OD[i]->print("l1\r");
           delay(50);
           sensores_OD[i]->print("e\r");
           Serial.print("OD");
@@ -225,6 +228,8 @@ void Nodo::modo_standby ()
 
   if (pins_pH_configurados) {
       pH_serial->print("e\r");
+      delay(50);
+      pH_serial->print("l1\r");
       delay(50);
       pH_serial->print("e\r");
       Serial.print("pH: ");
