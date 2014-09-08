@@ -68,25 +68,23 @@ int S_BUTTON = 19;
 int A_BUTTON = 2;
 int D_BUTTON = 3;
 
-// Menu variables
-MenuSystem ms;
-Menu mm("Info estanques");
-//MenuItem mm_mi1("Medir pH");
-MenuItem mm_mi2("Estanque 1");
-MenuItem mm_mi3("Estanque 2");
-MenuItem mm_mi4("Estanque 3");
-MenuItem mm_mi5("Estanque 4");
-Menu mpH1("Sensor de pH");
-MenuItem mpH1_mi1("En estanque 1");
-MenuItem mpH1_mi2("En estanque 2");
-MenuItem mpH1_mi3("En estanque 3");
-MenuItem mpH1_mi4("En estanque 4");
-Menu mu1("Modo Calibracion");
-MenuItem mu1_mi1("Sensor pH");
-MenuItem mu1_mi2("OD 1");
-MenuItem mu1_mi3("OD 2");
-MenuItem mu1_mi4("OD 3");
-MenuItem mu1_mi5("OD 4");
+MenuSystem menu_principal;
+Menu menu_info               ("Info estanques >");
+MenuItem mi_estanque_1       ("Estanque 1      ");
+MenuItem mi_estanque_2       ("Estanque 2      ");
+MenuItem mi_estanque_3       ("Estanque 3      ");
+MenuItem mi_estanque_4       ("Estanque 4      ");
+Menu menu_info_pH            ("Sensor de pH   >");
+MenuItem mi_pH_1             ("En estanque 1   ");
+MenuItem mi_pH_2             ("En estanque 2   ");
+MenuItem mi_pH_3             ("En estanque 3   ");
+MenuItem mi_pH_4             ("En estanque 4   ");
+Menu menu_calibrar           ("Calibrar       >");
+MenuItem mc_sensor_serial_1  ("Sensor pH       ");
+MenuItem mc_sensor_serial_2  ("OD 1            ");
+MenuItem mc_sensor_serial_3  ("OD 2            ");
+MenuItem mc_sensor_serial_4  ("OD 3            ");
+MenuItem mc_sensor_serial_5  ("OD 4            ");
 
 LiquidCrystal lcd(30,31,32,33,34,35);
 
@@ -321,39 +319,26 @@ void imprimir_info() {
 void configurar_menu ()
 {
     Serial.println("Construyendo menu.");
-    // Menu setup
-    /*
-       Menu Structure:
-       -Estanque1
-       --pH
-       -Estanque2
-       -Estanque3
-       -Estanque4
-       -Calibrar
-       --pH
-       --OD1
-       --OD2
-       --OD3
-       --OD4
-     */
-    mm.add_menu(&mpH1);
-    mpH1.add_item(&mpH1_mi1, &on_item1_selected);
-    mpH1.add_item(&mpH1_mi2, &on_item2_selected);
-    mpH1.add_item(&mpH1_mi3, &on_item3_selected);
-    mpH1.add_item(&mpH1_mi4, &on_item4_selected);
-    //  mm.add_item(&mm_mi1, &on_item1_selected);
-    mm.add_item(&mm_mi2, &on_item2_selected);
-    mm.add_item(&mm_mi3, &on_item3_selected);
-    mm.add_item(&mm_mi4, &on_item4_selected);
-    mm.add_item(&mm_mi5, &on_item5_selected);
-    mm.add_menu(&mu1);
-    mu1.add_menu(&mpH1);
-    //  mu1.add_item(&mu1_mi1, &on_cal1_selected);
-    mu1.add_item(&mu1_mi2, &on_cal2_selected);
-    mu1.add_item(&mu1_mi3, &on_cal3_selected);
-    mu1.add_item(&mu1_mi4, &on_cal4_selected);
-    mu1.add_item(&mu1_mi5, &on_cal5_selected);
-    ms.set_root_menu(&mm);
+    menu_info_pH.add_item(&mi_pH_1, &on_item1_selected);
+    menu_info_pH.add_item(&mi_pH_2, &on_item2_selected);
+    menu_info_pH.add_item(&mi_pH_3, &on_item3_selected);
+    menu_info_pH.add_item(&mi_pH_4, &on_item4_selected);
+
+    menu_info.add_menu(&menu_info_pH);
+    menu_info.add_item(&mi_estanque_1, &on_item2_selected);
+    menu_info.add_item(&mi_estanque_2, &on_item3_selected);
+    menu_info.add_item(&mi_estanque_3, &on_item4_selected);
+    menu_info.add_item(&mi_estanque_4, &on_item5_selected);
+
+    menu_info.add_menu(&menu_calibrar);
+    menu_calibrar.add_item(&mc_sensor_serial_2, &on_cal2_selected);
+    menu_calibrar.add_item(&mc_sensor_serial_3, &on_cal3_selected);
+    menu_calibrar.add_item(&mc_sensor_serial_4, &on_cal4_selected);
+    menu_calibrar.add_item(&mc_sensor_serial_5, &on_cal5_selected);
+
+    menu_calibrar.add_menu(&menu_info_pH);
+
+    menu_principal.set_root_menu(&menu_info);
     Serial.println("Menu construido.");
 }
 
@@ -374,7 +359,7 @@ void setup()
     lcd.setCursor(0,1);
     lcd.print("TanTan v0.1     ");
     delay(2500);
-    ms.next();
+    menu_principal.next();
     displayMenu();
 }
 
@@ -408,19 +393,19 @@ void buttonHandler() {
         //    Serial.println((char)BOTON_NOMBRE);
         switch((char)BOTON_NOMBRE) {
             case 'w': // Previus item
-                ms.prev();
+                menu_principal.prev();
                 displayMenu();
                 break;
             case 's': // Next item
-                ms.next();
+                menu_principal.next();
                 displayMenu();
                 break;
             case 'a': // Back presed
-                ms.back();
+                menu_principal.back();
                 displayMenu();
                 break;
             case 'd': // Select presed
-                ms.select();
+                menu_principal.select();
                 displayMenu();
                 break;
         }
@@ -431,7 +416,7 @@ void displayMenu() {
     lcd.clear();
     lcd.setCursor(0,0);
     // Display the menu
-    Menu const* cp_menu = ms.get_current_menu();
+    Menu const* cp_menu = menu_principal.get_current_menu();
     lcd.print(cp_menu->get_name());
 
     lcd.setCursor(0,1);
@@ -443,19 +428,19 @@ void serialHandler() {
     if((inChar = Serial.read())>0) {
         switch (inChar) {
             case 'w': // Previus item
-                ms.prev();
+                menu_principal.prev();
                 displayMenu();
                 break;
             case 's': // Next item
-                ms.next();
+                menu_principal.next();
                 displayMenu();
                 break;
             case 'a': // Back presed
-                ms.back();
+                menu_principal.back();
                 displayMenu();
                 break;
             case 'd': // Select presed
-                ms.select();
+                menu_principal.select();
                 displayMenu();
                 break;
             case '0': // pH
