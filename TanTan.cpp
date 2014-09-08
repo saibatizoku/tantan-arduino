@@ -164,7 +164,7 @@ int Nodo::pon_sensor_serial (String tipo, int rx, int tx)
     assert (rx >= 0);
     assert (tx >= 0);
     assert (rx != tx);
-    assert ((tipo == "OD") | (tipo == "pH"));
+    assert ((tipo == "OD") || (tipo == "pH"));
 
     if (tipo == "OD") {
         sensores_OD = crece_arreglo_de_SoftwareSerial (sensores_OD, num_sensores_OD);
@@ -264,7 +264,6 @@ float Nodo::read_pH (float _temp)
     pH_serial->listen();
     pH_serial->print(_temp);
     pH_serial->print("\r");
-    pH_serial->print("r\r");
     delay(280);
     if (pH_serial->available() > 0) {
         _rec = pH_serial->readBytesUntil('\r', _data, sizeof (_data) - 1);
