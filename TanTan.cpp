@@ -307,3 +307,11 @@ float Nodo::leer_temperatura (uint8_t* sensor)
 {
     return bus_temp->getTempC(sensor);
 }
+
+float Nodo::leer_temperatura (int num_sensor)
+{
+    assert (num_sensor >= 0);
+    assert (num_sensor < contar_sensores_temperatura ());
+
+    return bus_temp->getTempCByIndex(num_sensor);
+}

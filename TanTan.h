@@ -53,6 +53,7 @@ class Nodo
         void pedir_temperaturas ();
         int contar_sensores_temperatura ();
         float leer_temperatura (uint8_t* sensor);
+        float leer_temperatura (int num_sensor);
 
     private:
         boolean pins_pH_configurados;
