@@ -73,9 +73,7 @@ void configurar_sensores () {
 
 void imprimir_info () {
     Serial.print(nodo.contar_sensores_temperatura (), DEC);
-    Serial.println(" DS18B20");
-    Serial.print("T1: ");
-    printAddress(sensores_TEMP[SENSOR_T1]);
+    Serial.println(" sensores DS18B20");
 }
 
 void printAddress (DeviceAddress deviceAddress)
@@ -91,7 +89,7 @@ void imprimir_datos_todos()
 {
     print_TEMP (SENSOR_T1);
     print_OD (SENSOR_OD1);
-    print_pH();
+    print_pH ();
 }
 
 void print_TEMP (int idx)
@@ -105,7 +103,6 @@ void print_TEMP (int idx)
     Serial.print(pref + String(numidx)+":");
     Serial.println(_T);
     msg = pref + String(numidx) + ": " + _Ts + "    " ;
-    delay(1000);
 }
 
 void print_OD (int idx)
@@ -116,7 +113,6 @@ void print_OD (int idx)
     String msg = "OD" + String(idx+1) + ":"+ _Ts;
     Serial.println(msg);
     msg = "OD" + String(idx+1) + ": " + _Ts + "    " ;
-    delay(1000);
 }
 
 void print_pH ()
@@ -127,7 +123,6 @@ void print_pH ()
     String msg = "pH:" + pHs;
     Serial.println(msg);
     msg = "pH: " + pHs + "     ";
-    delay(1000);
 }
 
 float tomar_muestra_temperatura (int num_sensor)
