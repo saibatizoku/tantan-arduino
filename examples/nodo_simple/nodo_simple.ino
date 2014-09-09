@@ -87,42 +87,22 @@ void printAddress (DeviceAddress deviceAddress)
 
 void imprimir_datos_todos()
 {
-    print_TEMP (SENSOR_T1);
-    print_OD (SENSOR_OD1);
-    print_pH ();
+    Serial.println (conseguir_dato_sensor ("T", SENSOR_T1);
+    Serial.println (conseguir_dato_sensor ("OD", SENSOR_OD);
+    Serial.println (conseguir_dato_sensor ("pH", SENSOR_T1);
 }
 
-void print_TEMP (int idx)
+String conseguir_dato_sensor (String tipo, int sensor_idx)
 {
-    String pref = "T";
-    int numidx = idx + 1;
-    float _T = leer_muestra(idx, "T");
+    float _var = leer_muestra(sensor_idx, tipo);
     char tempod1[6];
-    String _Ts = dtostrf(_T, 1, 2, tempod1);
-    String msg = pref  + ":"+ _Ts;
-    Serial.print(pref + String(numidx)+":");
-    Serial.println(_T);
-    msg = pref + String(numidx) + ": " + _Ts + "    " ;
-}
-
-void print_OD (int idx)
-{
-    float _var = leer_muestra(idx, "OD");
-    char tempod1[6];
-    String _Ts = dtostrf(_var, 1, 2, tempod1);
-    String msg = "OD" + String(idx+1) + ":"+ _Ts;
-    Serial.println(msg);
-    msg = "OD" + String(idx+1) + ": " + _Ts + "    " ;
-}
-
-void print_pH ()
-{
-    float _var = leer_muestra(0, "pH");
-    char tempod1[6];
-    String pHs = dtostrf(_var, 1, 2, tempod1);
-    String msg = "pH:" + pHs;
-    Serial.println(msg);
-    msg = "pH: " + pHs + "     ";
+    String var_str = dtostrf(_var, 1, 2, tempod1);
+    String msg = tipo;
+    if (tipo != "pH") {
+        msg += String(sensor_idx+1);
+    }
+    msg += ":" + var_str;
+    return msg;
 }
 
 float tomar_muestra_temperatura (int num_sensor)
