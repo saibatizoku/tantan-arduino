@@ -1,6 +1,4 @@
-/*
-   Copyright 2014 Óscar Justo, Joaquín Rosales
-
+/* Copyright 2014 Óscar Justo, Joaquín Rosales
  Xalapa, Veracruz. México 2014
 
  This program is free software: you can redistribute it and/or modify
@@ -17,7 +15,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
 #ifndef TanTan_h
 #define TanTan_h
 
@@ -29,14 +26,13 @@
 #include <LiquidCrystal.h>
 
 
-
 class Nodo
 {
     public:
         Nodo();
         ~Nodo();
 
-        String info ();
+        String version_info ();
         void configura_pins_pH (int rx, int tx);
         int pon_sensor_serial (String tipo, int rx, int tx);
         int pon_sensor_OD (int rx, int tx);
@@ -68,5 +64,4 @@ class Nodo
 
         DallasTemperature* bus_temp;
 };
-
 #endif

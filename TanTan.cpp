@@ -1,6 +1,4 @@
-/*
-   Copyright 2014 Óscar Justo, Joaquín Rosales
-
+/* Copyright 2014 Óscar Justo, Joaquín Rosales
  Xalapa, Veracruz. México 2014
 
  This program is free software: you can redistribute it and/or modify
@@ -15,9 +13,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-
 #include <assert.h>
 #include "Arduino.h"
 #include <OneWire.h>
@@ -27,9 +23,8 @@
 #include "LiquidCrystal.h"
 #include "TanTan.h"
 
-
 String nombre = "Nodo Acuicola";
-String version = "v0.1";
+String version = "v0.2-dev";
 
 
 Nodo::Nodo ()
@@ -70,7 +65,7 @@ Nodo::~Nodo ()
     num_sensores_pH = 0;
 }
 
-String Nodo::info()
+String Nodo::version_info ()
 {
     return nombre + " " + version;
 }
@@ -196,7 +191,7 @@ int Nodo::pon_sensor_pH (int rx, int tx)
 void Nodo::begin ()
 {
   Serial.begin(38400);
-  Serial.println(Nodo::info());
+  Serial.println(version_info());
   Serial.println("Iniciando...");
   if (pins_pH_configurados)
       pH_serial->begin(38400);
