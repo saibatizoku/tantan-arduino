@@ -33,7 +33,6 @@
 
 #define RX_PH 2
 #define TX_PH 3
-
 #define RX_OD_1 4
 #define TX_OD_1 5
 
@@ -87,9 +86,9 @@ void printAddress (DeviceAddress deviceAddress)
 
 void imprimir_datos_todos()
 {
-    Serial.println (conseguir_dato_sensor ("T", SENSOR_T1);
-    Serial.println (conseguir_dato_sensor ("OD", SENSOR_OD);
-    Serial.println (conseguir_dato_sensor ("pH", SENSOR_T1);
+    Serial.println (conseguir_dato_sensor ("T", SENSOR_T1));
+    Serial.println (conseguir_dato_sensor ("OD", SENSOR_OD1));
+    Serial.println (conseguir_dato_sensor ("pH", SENSOR_T1));
 }
 
 String conseguir_dato_sensor (String tipo, int sensor_idx)
@@ -105,32 +104,22 @@ String conseguir_dato_sensor (String tipo, int sensor_idx)
     return msg;
 }
 
-float tomar_muestra_temperatura (int num_sensor)
-{
-    int i;
-    float suma = 0;
-    for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
-        suma += nodo.leer_temperatura(num_sensor);
-    }
-    return suma / (float)MUESTRAS_POR_LECTURA;
-}
-
 float leer_muestra (int num_sensor, String tipo_sensor)
 {
     int i;
     float suma = 0;
     if (tipo_sensor.equals("T")) {
-        return tomar_muestra_temperatura (num_sensor);
+        for (i = 0; i < MUESTRAS_POR_LECTURA; i++)
+            suma += nodo.leer_temperatura(num_sensor);
+        return suma / (float)MUESTRAS_POR_LECTURA;
     } else if (tipo_sensor.equals("OD")) {
-        for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
+        for (i = 0; i < MUESTRAS_POR_LECTURA; i++)
             suma += nodo.read_OD(num_sensor);
-        }
         return suma / (float)MUESTRAS_POR_LECTURA;
     } else if (tipo_sensor.equals("pH")) {
-        for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
+        for (i = 0; i < MUESTRAS_POR_LECTURA; i++)
             suma += nodo.read_pH();
-        }
         return suma / (float)MUESTRAS_POR_LECTURA;
     }
-    return 0.0;
+    return -1100;
 }
