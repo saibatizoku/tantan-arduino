@@ -65,6 +65,10 @@ Nodo::~Nodo ()
     delete[] sensores_pH;
     sensores_pH = NULL;
     num_sensores_pH = 0;
+ 
+    delete[] bus_temp;
+    bus_temp = NULL;
+    num_sensores_T = 0;
 }
 
 String Nodo::version_info ()
