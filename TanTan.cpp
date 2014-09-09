@@ -217,7 +217,7 @@ void Nodo::modo_standby ()
           Serial.print("OD");
           Serial.print(i + 1);
           Serial.print(": ");
-          Serial.println(Nodo::leer_sensor ("OD", i, "i\r"));
+          Serial.println(leer_sensor ("OD", i, "i\r"));
       }
   }
 
@@ -228,7 +228,7 @@ void Nodo::modo_standby ()
       delay(50);
       pH_serial->print("e\r");
       Serial.print("pH: ");
-      Serial.println(Nodo::leer_sensor ("pH", 0, "i\r"));
+      Serial.println(leer_sensor ("pH", 0, "i\r"));
   }
 }
 
