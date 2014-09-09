@@ -42,11 +42,8 @@ OneWire _wire (ONE_WIRE_BUS);
 DallasTemperature BUS_TEMPERATURA (&_wire);
 
 int SENSOR_pH, SENSOR_OD1;
-int MUESTRAS_POR_LECTURA = 5;
-
-DeviceAddress sensores_TEMP[1] = { { 0x28, 0xC3, 0x82, 0xFA, 0x04, 0x00, 0x00, 0x64 } };
-
 int SENSOR_T1 = 0;
+int MUESTRAS_POR_LECTURA = 5;
 
 Nodo nodo;
 
@@ -73,15 +70,6 @@ void configurar_sensores () {
 void imprimir_info () {
     Serial.print(nodo.contar_sensores_temperatura (), DEC);
     Serial.println(" sensores DS18B20");
-}
-
-void printAddress (DeviceAddress deviceAddress)
-{
-    for (uint8_t i = 0; i < 8; i++)
-    {
-        if (deviceAddress[i] < 16) Serial.print("0");
-        Serial.print(deviceAddress[i], HEX);
-    }
 }
 
 void imprimir_datos_todos()
@@ -114,11 +102,11 @@ float leer_muestra (int num_sensor, String tipo_sensor)
         return suma / (float)MUESTRAS_POR_LECTURA;
     } else if (tipo_sensor.equals("OD")) {
         for (i = 0; i < MUESTRAS_POR_LECTURA; i++)
-            suma += nodo.read_OD(num_sensor);
+            suma += nodo.leer_OD(num_sensor);
         return suma / (float)MUESTRAS_POR_LECTURA;
     } else if (tipo_sensor.equals("pH")) {
         for (i = 0; i < MUESTRAS_POR_LECTURA; i++)
-            suma += nodo.read_pH();
+            suma += nodo.leer_pH();
         return suma / (float)MUESTRAS_POR_LECTURA;
     }
     return -1100;

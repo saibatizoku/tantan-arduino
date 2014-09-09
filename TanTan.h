@@ -33,26 +33,27 @@ class Nodo
         ~Nodo();
 
         String version_info ();
-        void configura_pins_pH (int rx, int tx);
+        void begin ();
+
         int pon_sensor_serial (String tipo, int rx, int tx);
         int pon_sensor_OD (int rx, int tx);
         int pon_sensor_pH (int rx, int tx);
-        void begin ();
+        void configura_pins_pH (int rx, int tx);
+        void configura_bus_temperatura (DallasTemperature *_bus_temp);
         void modo_standby ();
 
         String leer_sensor (String tipo, int idx=0, String comando="r\r");
-        float read_pH ();
-        float read_pH (float temp);
-        float read_OD (int num_sensor);
+        float leer_pH ();
+        float leer_pH (float temp);
+        float leer_OD (int num_sensor);
 
-        void configura_bus_temperatura (DallasTemperature* _bus_temp);
         void pedir_temperaturas ();
         int contar_sensores_temperatura ();
-        float leer_temperatura (uint8_t* sensor);
+        float leer_temperatura (uint8_t *sensor);
         float leer_temperatura (int num_sensor);
 
     private:
-        boolean pins_pH_configurados;
+        boolean PINS_PH_CONFIGURADOS;
         int pin_rx_pH;
         int pin_tx_pH;
         SoftwareSerial *pH_serial;
@@ -61,7 +62,8 @@ class Nodo
         SoftwareSerial **sensores_OD;
         int num_sensores_pH;
         int num_sensores_OD;
+        int num_sensores_T;
 
-        DallasTemperature* bus_temp;
+        DallasTemperature *bus_temp;
 };
 #endif

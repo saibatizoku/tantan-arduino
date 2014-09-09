@@ -113,12 +113,12 @@ float leer_muestra (int num_sensor, String tipo_sensor)
         return tomar_muestra_temperatura (num_sensor);
     } else if (tipo_sensor.equals("OD")) {
         for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
-            suma += nodo.read_OD(num_sensor);
+            suma += nodo.leer_OD(num_sensor);
         }
         return suma / (float)MUESTRAS_POR_LECTURA;
     } else if (tipo_sensor.equals("pH")) {
         for (i = 0; i < MUESTRAS_POR_LECTURA; i++) {
-            suma += nodo.read_pH();
+            suma += nodo.leer_pH();
         }
         return suma / (float)MUESTRAS_POR_LECTURA;
     }

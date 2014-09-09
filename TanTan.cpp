@@ -29,21 +29,23 @@ String version = "v0.2-dev";
 
 Nodo::Nodo ()
 {
-    pins_pH_configurados = false;
+    PINS_PH_CONFIGURADOS = false;
     sensores_pH     = NULL;
-    num_sensores_pH = 0;
-
     sensores_OD     = NULL;
+
+    num_sensores_pH = 0;
     num_sensores_OD = 0;
+    num_sensores_T = 0;
 }
 
 Nodo::~Nodo ()
 {
     int i;
 
-    if (pins_pH_configurados) {
+    if (PINS_PH_CONFIGURADOS) {
         delete pH_serial;
         pH_serial = NULL;
+        PINS_PH_CONFIGURADOS = false;
     }
 
     for (i = 0; i < num_sensores_OD; i++) {
@@ -75,9 +77,9 @@ void Nodo::configura_pins_pH (int rx, int tx)
     assert (rx >= 0);
     assert (tx >= 0);
     assert (rx != tx);
-    assert (pins_pH_configurados == false);
+    assert (PINS_PH_CONFIGURADOS == false);
 
-    pins_pH_configurados = true;
+    PINS_PH_CONFIGURADOS = true;
     pin_rx_pH = rx;
     pin_tx_pH = tx;
 
@@ -112,10 +114,10 @@ String Nodo::leer_sensor (String tipo, int idx, String comando)
     assert (sizeof (comando) > 0);
 
     if (tipo == "pH") {
-        assert (pins_pH_configurados != false);
+        assert (PINS_PH_CONFIGURADOS != false);
 
         if (comando == "r\r") {
-            varval = Nodo::read_pH();
+            varval = leer_pH();
             varstr = dtostrf(varval, 1, 2, tempval);
             return varstr;
         }
@@ -133,7 +135,7 @@ String Nodo::leer_sensor (String tipo, int idx, String comando)
     if (tipo == "OD") {
         assert (num_sensores_OD > 0);
         if (comando == "r\r") {
-            varval = Nodo::read_OD(idx);
+            varval = leer_OD(idx);
             varstr = dtostrf(varval, 1, 2, tempval);
             return varstr;
         }
@@ -193,7 +195,7 @@ void Nodo::begin ()
   Serial.begin(38400);
   Serial.println(version_info());
   Serial.println("Iniciando...");
-  if (pins_pH_configurados)
+  if (PINS_PH_CONFIGURADOS)
       pH_serial->begin(38400);
 
   if (num_sensores_OD > 0) {
@@ -221,7 +223,7 @@ void Nodo::modo_standby ()
       }
   }
 
-  if (pins_pH_configurados) {
+  if (PINS_PH_CONFIGURADOS) {
       pH_serial->print("e\r");
       delay(50);
       pH_serial->print("l1\r");
@@ -232,12 +234,12 @@ void Nodo::modo_standby ()
   }
 }
 
-float Nodo::read_pH ()
+float Nodo::leer_pH ()
 {
     byte _rec = 0;
     char _data[20];
 
-    assert (pins_pH_configurados != false);
+    assert (PINS_PH_CONFIGURADOS != false);
 
     pH_serial->listen();
     pH_serial->print("r\r");
@@ -249,12 +251,12 @@ float Nodo::read_pH ()
     return atof(_data);
 }
 
-float Nodo::read_pH (float _temp)
+float Nodo::leer_pH (float _temp)
 {
     byte _rec = 0;
     char _data[20];
 
-    assert (pins_pH_configurados != false);
+    assert (PINS_PH_CONFIGURADOS != false);
 
     pH_serial->listen();
     pH_serial->print(_temp);
@@ -267,12 +269,11 @@ float Nodo::read_pH (float _temp)
     return atof(_data);
 }
 
-float Nodo::read_OD (int num_sensor)
+float Nodo::leer_OD (int num_sensor)
 {
     assert (num_sensor >= 0);
     assert (num_sensor < num_sensores_OD);
 
-    //... sensores_OD[num_sensor] ...
     byte _rec = 0;
     char _data[20];
     sensores_OD[num_sensor]->listen();
@@ -285,15 +286,17 @@ float Nodo::read_OD (int num_sensor)
     return atof(_data);
 }
 
-void Nodo::configura_bus_temperatura (DallasTemperature* _bus_temp)
+void Nodo::configura_bus_temperatura (DallasTemperature *_bus_temp)
 {
     bus_temp = _bus_temp;
     bus_temp->begin ();
     bus_temp->requestTemperatures ();
+    num_sensores_T = bus_temp->getDeviceCount();
 }
 
 void Nodo::pedir_temperaturas ()
 {
+    assert (num_sensores_T > 0);
     bus_temp->requestTemperatures();
 }
 
@@ -302,13 +305,15 @@ int Nodo::contar_sensores_temperatura ()
     return bus_temp->getDeviceCount();
 }
 
-float Nodo::leer_temperatura (uint8_t* sensor)
+float Nodo::leer_temperatura (uint8_t *sensor)
 {
+    assert (num_sensores_T > 0);
     return bus_temp->getTempC(sensor);
 }
 
 float Nodo::leer_temperatura (int num_sensor)
 {
+    assert (num_sensores_T > 0);
     assert (num_sensor >= 0);
     assert (num_sensor < contar_sensores_temperatura ());
 
