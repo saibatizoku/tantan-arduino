@@ -70,21 +70,21 @@ int D_BUTTON = 3;
 
 MenuSystem menu_principal;
 Menu menu_info               ("Info estanques >");
-MenuItem mi_estanque_1       ("Estanque 1      ");
-MenuItem mi_estanque_2       ("Estanque 2      ");
-MenuItem mi_estanque_3       ("Estanque 3      ");
-MenuItem mi_estanque_4       ("Estanque 4      ");
-Menu menu_info_pH            ("Sensor de pH   >");
-MenuItem mi_pH_1             ("En estanque 1   ");
-MenuItem mi_pH_2             ("En estanque 2   ");
-MenuItem mi_pH_3             ("En estanque 3   ");
-MenuItem mi_pH_4             ("En estanque 4   ");
-Menu menu_calibrar           ("Calibrar       >");
-MenuItem mc_sensor_serial_1  ("Sensor pH       ");
-MenuItem mc_sensor_serial_2  ("OD 1            ");
-MenuItem mc_sensor_serial_3  ("OD 2            ");
-MenuItem mc_sensor_serial_4  ("OD 3            ");
-MenuItem mc_sensor_serial_5  ("OD 4            ");
+MenuItem mi_estanque_1       ("   Estanque 1  >");
+MenuItem mi_estanque_2       ("<  Estanque 2  >");
+MenuItem mi_estanque_3       ("<  Estanque 3  >");
+MenuItem mi_estanque_4       ("<  Estanque 4  >");
+Menu menu_info_pH            ("< Sensor de pH >");
+MenuItem mi_pH_1             ("<< Estanque 1 >>");
+MenuItem mi_pH_2             ("<< Estanque 2 >>");
+MenuItem mi_pH_3             ("<< Estanque 3 >>");
+MenuItem mi_pH_4             ("<< Estanque 4   ");
+Menu menu_calibrar           ("< Calibrar      ");
+MenuItem mc_sensor_serial_1  ("<< Sensor pH    ");
+MenuItem mc_sensor_serial_2  ("<<    OD 1    >>");
+MenuItem mc_sensor_serial_3  ("<<    OD 2    >>");
+MenuItem mc_sensor_serial_4  ("<<    OD 3    >>");
+MenuItem mc_sensor_serial_5  ("<<    OD 4      ");
 
 LiquidCrystal lcd(30,31,32,33,34,35);
 
